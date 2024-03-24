@@ -23,7 +23,7 @@ export const TopSection = () => {
     setChecked((prev) => [...prev, item]);
   };
   return (
-    <section className="flex items-center justify-between w-[730px] text-[15px]">
+    <section className="flex items-center justify-between w-full text-[15px]">
       <div>
         <h1 className="font-bold text-4xl text-dark">Invoices</h1>
         <p className="text-Soft-Teal">There are 4 pending invoices</p>
