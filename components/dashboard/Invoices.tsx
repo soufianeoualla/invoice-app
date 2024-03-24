@@ -1,6 +1,10 @@
+import { SingleInvoice } from "./SingleInvoice"
 
 export const Invoices = () => {
   return (
-    <div>Invoices</div>
+    <div>
+        
+        <SingleInvoice/>
+    </div>
   )
 }

@@ -1,4 +1,5 @@
 import { Sidebar } from "@/components/Sidebar"
+import { Invoices } from "@/components/dashboard/Invoices"
 import { TopSection } from "@/components/dashboard/TopSection"
 
 const DashboardPage = () => {
@@ -7,6 +8,7 @@ const DashboardPage = () => {
         <Sidebar/>
         <div>
             <TopSection/>
+            <Invoices/>
         </div>
       
     </div>

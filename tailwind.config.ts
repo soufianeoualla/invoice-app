@@ -19,8 +19,7 @@ const config: Config = {
     },
     extend: {
       colors: {
-        
-        white: 'hsl(240, 27%, 98%)',
+        'light': 'hsl(240, 27%, 98%)',
         'dark':'hsl(233, 30%, 11%)',
         'Slate-Teal': 'hsl(233, 31%, 17%)',
         'Dusty-Aqua': 'hsl(233, 30%, 21%)',
