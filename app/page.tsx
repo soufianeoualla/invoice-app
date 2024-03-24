@@ -1,11 +1,9 @@
 
 
 export default function Home() {
- 
-  
   return (
-   <main>
+    <main className="bg-light">
     
-   </main> 
+    </main>
   );
 }
