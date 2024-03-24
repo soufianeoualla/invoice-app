@@ -1,10 +1,16 @@
+import { Sidebar } from "@/components/Sidebar"
+import { TopSection } from "@/components/dashboard/TopSection"
 
-const page = () => {
+const DashboardPage = () => {
   return (
-    <div>
+    <div className="flex gap-6">
+        <Sidebar/>
+        <div>
+            <TopSection/>
+        </div>
       
     </div>
   )
 }
 
-export default page
+export default DashboardPage
