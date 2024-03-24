@@ -1,12 +1,12 @@
 import type { Config } from "tailwindcss";
 
-const config = {
+const config: Config = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
   ],
   prefix: "",
   theme: {
@@ -19,35 +19,45 @@ const config = {
     },
     extend: {
       colors: {
+        white: 'hsl(240, 27%, 98%)',
+        'Slate-Teal': 'hsl(233, 31%, 17%)',
+        'Dusty-Aqua': 'hsl(233, 30%, 21%)',
+        'Bright-Turquoise': 'hsl(231, 73%, 93%)',
+        'Soft-Teal': 'hsl(231, 20%, 61%)',
+        'Subtle-Turquoise': 'hsl(231, 37%, 63%)',
+        'Midnight-Teal': 'hsl(228, 29%, 7%)',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
-        SubtleTurquoise: {
-          DEFAULT: "hsl(var(--Subtle-Turquoise))",
-        },
-        MidnightTeal: {
-          DEFAULT: "hsl(var(--Midnight-Teal))",
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
-        SlateTeal: {
-          DEFAULT: "hsl(var(--Slate-Teal))",
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
         },
-        DustyAqua: {
-          DEFAULT: "hsl(var(--Dusty-Aqua))",
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
         },
-        BrightTurquoise: {
-          DEFAULT: "hsl(var(--Bright-Turquoise))",
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
         },
-        SoftTeal: {
-          DEFAULT: "hsl(var(--Soft-Teal))",
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
         },
       },
       borderRadius: {
@@ -72,6 +82,6 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config;
+};
 
 export default config;
