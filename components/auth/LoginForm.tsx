@@ -18,6 +18,7 @@ import { useState, useTransition } from "react";
 import { FormError } from "./FormError";
 import { FormSuccess } from "./FormSuccess";
 import Link from "next/link";
+import { login } from "@/actions/login";
 
 export const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -31,22 +32,22 @@ export const LoginForm = () => {
     },
   });
 
-  // const onLogin = (values: z.infer<typeof LoginSchema>) => {
-  //   setError("");
-  //   setSuccess("");
-  //   startTransition(() => {
-  //     login(values).then((data) => {
-  //       setError(data?.error);
-  //       setSuccess(data?.success);
-  //     });
-  //   });
-  // };
+  const onLogin = (values: z.infer<typeof LoginSchema>) => {
+    setError("");
+    setSuccess("");
+    startTransition(() => {
+      login(values).then((data) => {
+        setError(data?.error);
+        setSuccess(data?.success);
+      });
+    });
+  };
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(()=>{})}
-        className="space-y-8 text-left"
+        onSubmit={form.handleSubmit(onLogin)}
+        className="space-y-6 text-left"
       >
         <FormField
           control={form.control}

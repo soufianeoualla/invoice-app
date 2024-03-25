@@ -7,9 +7,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import SocialProviders from "./SocialProviders";
+import { SocialProviders } from "./SocialProviders";
 import ResetPassword from "./ResetPassword";
-import RegisterForm from "./RegisterForm";
+import { RegisterForm } from "./RegisterForm";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
 import { LoginForm } from "./LoginForm";
@@ -45,7 +45,7 @@ const CardWrapper = ({
 
         <CardDescription>{headerLabel} </CardDescription>
       </CardHeader>
-      <CardContent className=" grid gap-2">
+      <CardContent className=" grid gap-4">
         {type === "login" ? (
           <LoginForm />
         ) : type === "register" ? (
@@ -53,19 +53,18 @@ const CardWrapper = ({
         ) : (
           type === "reset" && <ResetPassword />
         )}
+
+        {showSocial && <SocialProviders />}
+      </CardContent>
+
+      <CardFooter className="flex justify-center items-center">
         <Link
-          className=" text-muted-foreground hover:text-black hover:underline "
+          className=" text-muted-foreground hover:text-black hover:underline  "
           href={backButtonHref}
         >
           {backButtonLabel}
         </Link>
-      </CardContent>
-
-      {showSocial && (
-        <CardFooter>
-          <SocialProviders />
-        </CardFooter>
-      )}
+      </CardFooter>
     </Card>
   );
 };

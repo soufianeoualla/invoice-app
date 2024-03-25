@@ -47,7 +47,7 @@ export const RegisterForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onRegister)}
-        className="space-y-8 text-left"
+        className="space-y-6 text-left"
       >
         <FormField
           control={form.control}
