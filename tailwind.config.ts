@@ -27,6 +27,7 @@ const config: Config = {
         'Soft-Teal': 'hsl(231, 20%, 61%)',
         'Subtle-Turquoise': 'hsl(231, 37%, 63%)',
         'Midnight-Teal': 'hsl(228, 29%, 7%)',
+        'light-purple':'hsl(252, 100%, 73%)',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -80,6 +81,9 @@ const config: Config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      screens:{
+        'sm': {'max': '639px'},
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],
