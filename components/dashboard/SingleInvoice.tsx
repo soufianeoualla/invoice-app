@@ -3,7 +3,7 @@ import { MdChevronRight } from "react-icons/md";
 
 export const SingleInvoice = () => {
   return (
-    <div className="w-full flex justify-between pr-3 pl-8  items-center h-[72px] bg-white rounded-lg shadow-sm hover:border-primary hover:border ">
+    <div className="w-full flex justify-between pr-3 pl-8  items-center h-[72px] bg-white rounded-lg shadow-sm hover:border-primary hover:border cursor-pointer ">
       <b className="text-dark">
         <span className="text-Subtle-Turquoise">#</span>RT3080
       </b>

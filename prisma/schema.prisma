@@ -11,8 +11,8 @@ generator client {
 // prisma/schema.prisma
 // prisma/schema.prisma
 datasource db {
-  provider  = "postgresql"
-  url  	    = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
   // uncomment next line if you use Prisma <5.10
   // directUrl = env("DATABASE_URL_UNPOOLED")
 }
@@ -25,6 +25,58 @@ model User {
   emailVerified DateTime?
   image         String?
   accounts      Account[]
+  invoice       invoice[]
+}
+
+enum status {
+  draft
+  pending
+  paid
+}
+
+model invoice {
+  id            String          @id @default(cuid()) @map(name: "id")
+  description   String?
+  clientName    String
+  clientEmail   String
+  total         Float
+  status        status          @default(draft)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  user          User            @relation(fields: [userId], references: [id])
+  userId        String          @default(cuid()) @map(name: "user_id")
+  senderAddress senderAddress[]
+  clientAddress clientAddress[]
+  item          item[]
+}
+
+model senderAddress {
+  id        Int     @id @default(autoincrement())
+  street    String
+  city      String
+  postCode  String
+  country   String
+  invoice   invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId String  @default(cuid()) @map(name: "invoice_id")
+}
+
+model clientAddress {
+  id        Int     @id @default(autoincrement())
+  street    String
+  city      String
+  postCode  String
+  country   String
+  invoice   invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId String  @default(cuid()) @map(name: "invoice_id")
+}
+
+model item {
+  id        Int     @id @default(autoincrement())
+  quantity  Int
+  price     Float
+  total     Float
+  invoice   invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId String  @default(cuid()) @map(name: "invoice_id")
 }
 
 model verificationToken {
@@ -44,7 +96,6 @@ model passwordResetToken {
 
   @@unique([email, token])
 }
-
 
 model Account {
   id                String  @id @default(cuid())

@@ -53,7 +53,7 @@ export const TopSection = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <button className="w-[150px] h-12 flex gap-4 px-2 justify-start items-center rounded-3xl text-white bg-primary ">
+          <button className="w-[150px] h-12 flex gap-4 px-2 justify-start items-center rounded-3xl text-white bg-primary hover:bg-primary-foreground ">
             <div className="w-8 h-8 rounded-full flex justify-center items-center bg-white">
               <FaPlus className="text-primary" />
             </div>

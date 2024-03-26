@@ -5,7 +5,7 @@ import avatar from "@/components/assets/image-avatar.jpg";
 
 export const Sidebar = () => {
   return (
-    <div className="w-[96px] bg-DustyAqua h-screen bg-Dusty-Aqua rounded-r-2xl flex flex-col justify-between ">
+    <div className=" bg-DustyAqua h-screen bg-Dusty-Aqua rounded-r-2xl flex flex-col justify-between ">
       <div className="logo w-full h-[103px] relative">
         <div className="w-full h-full bg-primary rounded-r-2xl " />
         <div className="w-full h-[50%] bg-primary-foreground rounded-br-2xl rounded-tl-2xl absolute bottom-0" />
