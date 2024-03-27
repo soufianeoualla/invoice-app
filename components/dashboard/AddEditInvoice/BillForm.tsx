@@ -10,8 +10,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 import { Input } from "@/components/ui/input";
 import { BillFormSchema } from "@/schemas";
+import { ItemList } from "./itemList";
+import { DatePicker } from "./DatePicker";
+import { PaymentDue } from "./PaymentDue";
+import { Button } from "@/components/ui/button";
 export const BillForm = () => {
   const form = useForm<z.infer<typeof BillFormSchema>>({
     resolver: zodResolver(BillFormSchema),
@@ -29,9 +34,10 @@ export const BillForm = () => {
       Description: "",
     },
   });
+
   return (
     <div>
-      <h2 className="text-primary mb-6">Bill Form</h2>
+      <h2 className="text-primary mb-6 font-bold">Bill Form</h2>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(() => {})} className="space-y-6">
@@ -91,7 +97,7 @@ export const BillForm = () => {
               )}
             />
           </div>
-          <h2 className="text-primary mb-6">Bill Form</h2>
+          <h2 className="text-primary mb-6 font-bold">Bill To</h2>
           <FormField
             control={form.control}
             name="clientName"
@@ -173,6 +179,54 @@ export const BillForm = () => {
               )}
             />
           </div>
+
+          <div className=" flex items-center justify-between w-full ">
+            <div className="space-y-2 w-[48%]">
+              <span className="text-[13px] text-Subtle-Turquoise font-medium ">Invoice Date</span>
+              <DatePicker />
+            </div>
+            <PaymentDue />
+          </div>
+          <FormField
+            control={form.control}
+            name="Description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Project Description</FormLabel>
+                <FormControl>
+                  <Input
+                    className="w-full"
+                    type="text"
+                    placeholder=""
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="space-y-10">
+
+          <ItemList />
+
+          <div className="flex justify-between items-center ">
+            <Button
+              className="text-light-purple hover:bg-transparent"
+              variant={"ghost"}
+            >
+              Discard
+            </Button>
+            <div className="space-x-2">
+              <Button className="bg-Dusty-Aqua text-Soft-Teal h-12 pt-3 w-[133px] font-bold text-[15px] rounded-3xl hover:bg-dark">
+                Save as Draft
+              </Button>
+              <Button className="font-bold text-[15px]  h-12 pt-3 w-[133px] rounded-3xl">
+                Save & Send
+              </Button>
+            </div>
+          </div>
+          </div>
+
         </form>
       </Form>
     </div>

@@ -1,11 +1,12 @@
-import { DashboardWrapper } from "@/components/dashboard/DashboardWrapper"
-import { ViewInvoice } from "@/components/dashboard/modals/ViewInvoice"
-
+import { DashboardWrapper } from "@/components/dashboard/DashboardWrapper";
+import { AddInvoice } from "@/components/dashboard/modals/AddInvoice";
 
 const DashboardPage = () => {
   return (
-    <ViewInvoice/>
-  )
-}
+    <>
+      <AddInvoice/>
+    </>
+  );
+};
 
-export default DashboardPage
+export default DashboardPage;
