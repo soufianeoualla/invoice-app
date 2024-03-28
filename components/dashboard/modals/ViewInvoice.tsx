@@ -74,6 +74,12 @@ export const ViewInvoice = () => {
   paymentDueDate.setDate(
     paymentDueDate.getDate() + parseInt(invoice.paymentDue)
   );
+  const background =
+    invoice.status === "draft"
+      ? "#373B53"
+      : invoice.status === "pending"
+      ? "#FF8F00"
+      : "emerald-500";
 
   return (
     <>
@@ -91,9 +97,11 @@ export const ViewInvoice = () => {
             <small className="text-[13px] font-medium text-Soft-Teal">
               Status
             </small>
-            <div className="w-[104px] h-10 bg-pending/15 flex items-center gap-x-2 justify-center text-pending font-bold rounded-md">
-              <div className="w-2 h-2 rounded-full bg-pending" />
-              <span className="capitalize">{invoice.status}</span>
+            <div
+              className={`w-[104px] h-10 text-[${background}] bg-[${background}] bg-opacity-10 rounded-md flex items-center justify-center gap-2`}
+            >
+              <div className={`w-2 h-2 rounded-full bg-[${background}]`} />
+              <b className={` capitalize`}>{invoice.status}</b>
             </div>
           </div>
 
@@ -180,22 +188,22 @@ export const ViewInvoice = () => {
                 <th>Price</th>
                 <th>Total</th>
               </tr>
-              {invoice.item.map(item=>(
-
-              <tr key={item.id}>
-                <td>{item.itemName}</td>
-                <td>{item.quantity}</td>
-                <td>{formatPrice(item.price)}</td>
-                <td>{formatPrice(item.total)}</td>
-              </tr>
+              {invoice.item.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.itemName}</td>
+                  <td className="text-Subtle-Turquoise">{item.quantity}</td>
+                  <td className="text-Subtle-Turquoise">
+                    {formatPrice(item.price)}
+                  </td>
+                  <td>{formatPrice(item.total)}</td>
+                </tr>
               ))}
-             
             </table>
           </div>
           <div className="bg-Dusty-Aqua w-full h-20 px-8 flex justify-between items-center text-white text-[13px] rounded-b-md ">
-              <span>Amount Due</span>
-              <strong className="text-2xl ">{formatPrice(invoice.total)}</strong>
-            </div>
+            <span>Amount Due</span>
+            <strong className="text-2xl ">{formatPrice(invoice.total)}</strong>
+          </div>
         </div>
       </div>
     </>
