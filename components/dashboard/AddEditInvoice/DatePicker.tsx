@@ -20,9 +20,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export const DatePicker = () => {
-  const [date, setDate] = React.useState<Date>();
 
+interface DatePickerProp {
+  date: Date | undefined
+  setDate : any
+
+}
+
+
+export const DatePicker = ({date,setDate}:DatePickerProp) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -42,7 +48,7 @@ export const DatePicker = () => {
         className="flex w-auto flex-col space-y-2 p-2"
       >
         <Select
-        defaultValue="0"
+          defaultValue="0"
           onValueChange={(value) =>
             setDate(addDays(new Date(), parseInt(value)))
           }

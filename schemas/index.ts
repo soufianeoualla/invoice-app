@@ -15,7 +15,7 @@ export const ForgotPsswordSchema = z.object({
 });
 
 export const RegisterSchema = z.object({
-  name: z.string().min(1, {
+  name: z.string().min(3, {
     message: "Full Name is Required",
   }),
   email: z.string().email({
@@ -44,34 +44,34 @@ export const ResetSchema = z
   );
 
 export const BillFormSchema = z.object({
-  streetAddress: z.string().min(1, {
+  streetAddress: z.string().min(3, {
     message: "Street Address is Required",
   }),
-  city: z.string().email({
-    message: "city is Required",
+  city: z.string().min(3, {
+    message: "City is required",
   }),
-  postCode: z.string().min(6, {
+  postCode: z.string().min(3, {
     message: "Post Code is required",
   }),
-  country: z.string().min(6, {
+  country: z.string().min(3, {
     message: "Country is required",
   }),
-  clientName: z.string().min(1, {
+  clientName: z.string().min(3, {
     message: "Client Name is Required",
   }),
-  clientEmail: z.string().min(1, {
+  clientEmail: z.string().min(3, {
     message: "Client Email is Required",
   }),
-  ClientStreetAddress: z.string().min(1, {
+  ClientStreetAddress: z.string().min(3, {
     message: "Street Address is Required",
   }),
-  ClientCity: z.string().email({
-    message: "city is Required",
+  ClientCity: z.string().min(3, {
+    message: "City is required",
   }),
-  ClientPostCode: z.string().min(6, {
+  ClientPostCode: z.string().min(3, {
     message: "Post Code is required",
   }),
-  ClientCountry: z.string().min(6, {
+  ClientCountry: z.string().min(3, {
     message: "Country is required",
   }),
   Description: z.string().min(6, {

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -8,8 +8,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export const PaymentDue = () => {
-  const [paymentDue, setPaymentDue] = useState<string | undefined>("");
+interface PaymentDueProp {
+  setPaymentDue : Dispatch<SetStateAction<string | undefined>> 
+}
+
+export const PaymentDue = ({setPaymentDue}:PaymentDueProp) => {
 
   const handlePayemntDueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPaymentDue(e.target.value);

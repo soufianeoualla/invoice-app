@@ -1,10 +1,12 @@
 import { DashboardWrapper } from "@/components/dashboard/DashboardWrapper";
-import { AddInvoice } from "@/components/dashboard/modals/AddInvoice";
+import { AddEditModalProvider } from "@/context/AddEditModalContext";
 
 const DashboardPage = () => {
   return (
     <>
-      <AddInvoice/>
+      <AddEditModalProvider>
+        <DashboardWrapper />
+      </AddEditModalProvider>
     </>
   );
 };

@@ -36,6 +36,10 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+
+/* Keyword values */
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;

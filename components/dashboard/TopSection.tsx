@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,8 +11,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { IoChevronDown } from "react-icons/io5";
+import { AddEditModalContext } from "@/context/AddEditModalContext";
 
 export const TopSection = () => {
+  const { toggle } = useContext(AddEditModalContext);
   const filters = ["draft", "pending", "paid"];
   const [checked, setChecked] = useState<Array<string>>([]);
 
@@ -53,11 +55,14 @@ export const TopSection = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <button className="w-[150px] h-12 flex gap-4 px-2 justify-start items-center rounded-3xl text-white bg-primary hover:bg-primary-foreground ">
+          <button
+            onClick={()=>toggle()}
+            className="w-[150px] h-12 flex gap-4 px-2 justify-start items-center rounded-3xl text-white bg-primary hover:bg-primary-foreground "
+          >
             <div className="w-8 h-8 rounded-full flex justify-center items-center bg-white">
               <FaPlus className="text-primary" />
             </div>
-            <b>New Invoice</b>
+            <b className="pt-1">New Invoice</b>
           </button>
         </div>
       </div>

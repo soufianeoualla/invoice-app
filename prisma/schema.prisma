@@ -35,13 +35,15 @@ enum status {
 }
 
 model invoice {
-  id            String          @id @default(cuid()) @map(name: "id")
+  id            String          @id 
   description   String?
   clientName    String
   clientEmail   String
   total         Float
   status        status          @default(draft)
   createdAt     DateTime        @default(now())
+  invoiceDate   DateTime
+  paymentDue    String
   updatedAt     DateTime        @updatedAt
   user          User            @relation(fields: [userId], references: [id])
   userId        String          @default(cuid()) @map(name: "user_id")
@@ -72,11 +74,12 @@ model clientAddress {
 
 model item {
   id        Int     @id @default(autoincrement())
+  itemName  String
   quantity  Int
   price     Float
   total     Float
   invoice   invoice @relation(fields: [invoiceId], references: [id])
-  invoiceId String  @default(cuid()) @map(name: "invoice_id")
+  invoiceId  String   @map(name: "invoice_id")
 }
 
 model verificationToken {
