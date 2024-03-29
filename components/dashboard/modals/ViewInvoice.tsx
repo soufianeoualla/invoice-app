@@ -1,10 +1,11 @@
 "use client";
+import { deleteInvoice, markAsPaid } from "@/actions/InvoiceActions";
 import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { getSingleInvoice } from "@/data/singleInvoice";
 import { formatDate, formatPrice } from "@/lib/functions";
 import { Item } from "@radix-ui/react-dropdown-menu";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 
@@ -47,7 +48,7 @@ interface InvoiceProps {
 export const ViewInvoice = () => {
   const [invoice, setInvoice] = useState<InvoiceProps>();
   const searchParams = useSearchParams();
-
+  const router = useRouter()
   const id = searchParams.get("id");
 
   const getData = useCallback(async () => {
@@ -81,6 +82,11 @@ export const ViewInvoice = () => {
       ? "#FF8F00"
       : "emerald-500";
 
+      const onDelete = ()=>{
+        deleteInvoice(invoice.id)
+        router.push('/dashboard')
+      }
+
   return (
     <>
       <div className="w-[730px] mt-[50px] mx-auto ">
@@ -112,12 +118,18 @@ export const ViewInvoice = () => {
             >
               Edit
             </Button>
-            <Button className="bg-destructive/90 pt-3 hover:bg-destructive/75 text-white rounded-3xl w-[89px] h-12 text-[15px] font-bold tracking-wide">
+            <Button
+              onClick={onDelete}
+              className="bg-destructive/90 pt-3 hover:bg-destructive/75 text-white rounded-3xl w-[89px] h-12 text-[15px] font-bold tracking-wide"
+            >
               Delete
             </Button>
-            <Button className="rounded-3xl w-[131px] pt-3 h-12 text-[15px] font-bold tracking-wide">
+            {invoice.status !=='paid' && <Button
+              onClick={() => markAsPaid(invoice.id)}
+              className="rounded-3xl w-[131px] pt-3 h-12 text-[15px] font-bold tracking-wide"
+            >
               Mark as Paid{" "}
-            </Button>
+            </Button>}
           </div>
         </div>
 

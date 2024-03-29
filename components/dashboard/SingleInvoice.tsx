@@ -56,7 +56,7 @@ export const SingleInvoice = ({ invoice }: SingleInvoiceProps) => {
       : "emerald-500";
 
   return (
-    <Link href={`/dashboard/invoice/${invoice.id}`}>
+    <Link href={`/dashboard/invoice?id=${invoice.id}`}>
       <div className="w-full flex justify-between pr-3 pl-8  items-center h-[72px] bg-white rounded-lg shadow-sm hover:border-primary hover:border cursor-pointer ">
         <div className="flex items-center justify-between gap-x-16">
           <b className="text-dark uppercase w-[12%] ">

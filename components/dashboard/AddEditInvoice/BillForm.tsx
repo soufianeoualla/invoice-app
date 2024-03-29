@@ -28,6 +28,11 @@ interface ItemProps {
   total: number;
   id: string;
 }
+interface errorProp {
+  ItemName: string;
+  quantity: string;
+  price: string;
+}
 export const BillForm = () => {
   const { toggle } = useContext(AddEditModalContext);
 
@@ -49,32 +54,75 @@ export const BillForm = () => {
   });
 
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const [paymentDue,setPaymentDue]=useState<string | undefined>('7')
-  const [isPending ,startTransition]=useTransition()
+  const [paymentDue, setPaymentDue] = useState<string | undefined>("7");
+  const [error, setError] = useState<errorProp | undefined>({
+    ItemName: "",
+    quantity: "",
+    price: "",
+  });
+  const [isPending, startTransition] = useTransition();
   const [items, setItems] = useState<ItemProps[]>([
     {
       ItemName: "",
-      quantity: '1',
-      price: '',
+      quantity: "1",
+      price: "",
       total: 0,
       id: uuidv4(),
     },
   ]);
-  const total = items.reduce((acc, item) => acc + item.total,0);
-  const onSaveDarft = (values:z.infer<typeof BillFormSchema>)=>{
-    startTransition(()=>{
-      addInvoice(values,total,date as Date, paymentDue as string,items,'daft')
-      console.log(typeof items[0].price);
-      toggle()
-    })
-  }
+  const total = items.reduce((acc, item) => acc + item.total, 0);
+
+  const validateItems = () => {
+    const errors: errorProp = {
+      ItemName: "",
+      quantity: "",
+      price: "",
+    };
+    items.forEach((item) => {
+      if (item.ItemName.trim() === "") {
+        errors.ItemName = "Item name cannot be empty";
+      }
+
+      if (item.quantity.trim() === "") {
+        errors.quantity = "Quantity cannot be empty";
+      } else if (parseInt(item.quantity) < 1) {
+        errors.quantity = "Quantity must be greater than one";
+      }
+
+      if (item.price.trim() === "") {
+        errors.price = "price cannot be empty";
+      } else if (parseInt(item.price) < 1) {
+        errors.quantity = "price must be greater than one";
+      }
+    });
+    setError(errors ? errors : undefined);
+
+    if (errors) return false;
+    return true;
+  };
+  const onSave = (values: z.infer<typeof BillFormSchema>) => {
+    const valid = validateItems();
+    if (!valid) return;
+    console.log(valid);
+    startTransition(() => {
+      addInvoice(
+        values,
+        total,
+        date as Date,
+        paymentDue as string,
+        items,
+        "pending"
+      );
+      toggle();
+    });
+  };
 
   return (
     <div>
       <h2 className="text-primary mb-6 font-bold">Bill Form</h2>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSaveDarft)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSave)} className="space-y-6">
           <FormField
             control={form.control}
             name="streetAddress"
@@ -219,7 +267,7 @@ export const BillForm = () => {
               <span className="text-[13px] text-Subtle-Turquoise font-medium ">
                 Invoice Date
               </span>
-              <DatePicker setDate={setDate}  date={date}/>
+              <DatePicker setDate={setDate} date={date} />
             </div>
             <PaymentDue setPaymentDue={setPaymentDue} />
           </div>
@@ -231,7 +279,7 @@ export const BillForm = () => {
                 <FormLabel>Project Description</FormLabel>
                 <FormControl>
                   <Input
-                  disabled={isPending}
+                    disabled={isPending}
                     className="w-full"
                     type="text"
                     placeholder=""
@@ -245,25 +293,33 @@ export const BillForm = () => {
           <div className="space-y-10">
             <ItemList setItems={setItems} items={items} />
 
+            <div className="text-[12px] text-destructive grid capitalize">
+              <em> {error?.ItemName}</em>
+              <em> {error?.quantity}</em>
+              <em> {error?.price}</em>
+            </div>
+
             <div className="flex justify-between items-center ">
               <Button
-              variant={'ghost'}
-              type="button"
-              onClick={toggle}
-              disabled={isPending}
+                variant={"ghost"}
+                type="button"
+                onClick={toggle}
+                disabled={isPending}
                 className="text-light-purple pt-3 hover:bg-transparent hover:text-dark text-sm font-bold"
               >
                 Discard
               </Button>
               <div className="space-x-2">
-                <Button  
-                disabled={isPending}
-                 className="bg-Dusty-Aqua text-Soft-Teal h-12 pt-3 w-[133px] font-bold text-[15px] rounded-3xl hover:bg-dark">
+                <Button
+                  disabled={isPending}
+                  className="bg-Dusty-Aqua text-Soft-Teal h-12 pt-3 w-[133px] font-bold text-[15px] rounded-3xl hover:bg-dark"
+                >
                   Save as Draft
                 </Button>
                 <Button
-                disabled={isPending}
-                 className="font-bold text-[15px]  h-12 pt-3 w-[133px] rounded-3xl">
+                  disabled={isPending}
+                  className="font-bold text-[15px]  h-12 pt-3 w-[133px] rounded-3xl"
+                >
                   Save & Send
                 </Button>
               </div>

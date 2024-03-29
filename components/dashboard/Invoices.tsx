@@ -46,8 +46,7 @@ export const Invoices = () => {
   useEffect(() => {
     const getData = async () => {
       const response = await getInvoices();
-      setInvoices(response);
-      console.log(response)
+      setInvoices(response as InvoiceProps[]);
     };
     getData();
   }, []);

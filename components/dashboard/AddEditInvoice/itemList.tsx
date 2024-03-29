@@ -16,22 +16,20 @@ interface ItemListProp {
   setItems: Dispatch<SetStateAction<ItemProps[]>>;
 }
 
-
-export const ItemList = ({items,setItems}:ItemListProp) => {
- 
+export const ItemList = ({ items, setItems }: ItemListProp) => {
   const handleChange = (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setItems((prevItems:any) => {
-      const updatedItems = prevItems.map((item:ItemProps) => {
+    setItems((prevItems: any) => {
+      const updatedItems = prevItems.map((item: ItemProps) => {
         if (item.id === id) {
           return { ...item, [name]: value };
         }
         return item;
       });
 
-      const updatedItemsWithTotal = updatedItems.map((item:ItemProps) => ({
+      const updatedItemsWithTotal = updatedItems.map((item: ItemProps) => ({
         ...item,
-        total: (parseFloat(item.price) * parseInt(item.quantity)),
+        total: parseFloat(item.price) * parseInt(item.quantity),
       }));
 
       return updatedItemsWithTotal;
@@ -42,15 +40,17 @@ export const ItemList = ({items,setItems}:ItemListProp) => {
       ...prevItems,
       {
         ItemName: "",
-        quantity: '1',
-        price: '',
+        quantity: "1",
+        price: "",
         total: 0,
         id: uuidv4(),
       },
     ]);
   };
   const onItemDelete = (id: string) => {
-    setItems(items.filter((item:ItemProps) => item.id !== id));
+    if (items.length > 1) {
+      setItems(items.filter((item: ItemProps) => item.id !== id));
+    }
   };
 
   return (
@@ -64,7 +64,7 @@ export const ItemList = ({items,setItems}:ItemListProp) => {
           <span className="w-[15%] text-[13px] font-medium">Total</span>
         </div>
         <div className="space-y-5 mt-3">
-          {items.map((item:ItemProps) => (
+          {items.map((item: ItemProps) => (
             <div key={item.id} className="flex w-full items-center gap-4">
               <Input
                 className="w-[35%] font-bold text-dark"
@@ -88,16 +88,19 @@ export const ItemList = ({items,setItems}:ItemListProp) => {
               />
               <span className="w-[15%] text-Soft-Teal font-bold">
                 {" "}
-                ${(item.total) > 0 ? item.total.toFixed(2) : "0.00"}
+                ${item.total > 0 ? item.total.toFixed(2) : "0.00"}
               </span>
-              <Button
-                onClick={() => onItemDelete(item.id)}
-                variant={"ghost"}
-                size={"sm"}
-                className=""
-              >
-                <MdDelete className="text-Soft-Teal text-xl hover:text-destructive " />
-              </Button>
+              {items.length > 1 && (
+                <Button
+                  type="button"
+                  onClick={() => onItemDelete(item.id)}
+                  variant={"ghost"}
+                  size={"sm"}
+                  className=""
+                >
+                  <MdDelete className="text-Soft-Teal text-xl hover:text-destructive " />
+                </Button>
+              )}
             </div>
           ))}
         </div>
