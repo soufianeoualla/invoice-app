@@ -13,13 +13,16 @@ interface ItemProps {
   id: string;
 }
 
+
+const promises:any = [];
+
+
 export const addInvoice = async (
   values: z.infer<typeof BillFormSchema>,
   total: number,
   invoiceDate: Date,
   paymentDue: string,
   items: ItemProps[],
-  type: string
 ) => {
   const session = await auth();
   const userId = session?.user?.id;
@@ -42,10 +45,11 @@ export const addInvoice = async (
     postCode,
     streetAddress,
   } = validateFields.data;
-  const status = type === "draft" ? "draft" : "pending";
+  const status = "pending";
   const InvoiceId = uuid().substring(0,5);
 
-  await db.invoice.create({
+  
+  promises.push(db.invoice.create({
     data: {
       id: InvoiceId,
       status: status,
@@ -57,8 +61,9 @@ export const addInvoice = async (
       invoiceDate: invoiceDate,
       total: total,
     },
-  });
-  await db.senderAddress.create({
+  }));
+  
+  promises.push(db.senderAddress.create({
     data: {
       street: streetAddress,
       city: city,
@@ -66,8 +71,9 @@ export const addInvoice = async (
       postCode: postCode,
       invoiceId: InvoiceId,
     },
-  });
-  await db.clientAddress.create({
+  }));
+  
+  promises.push(db.clientAddress.create({
     data: {
       street: ClientStreetAddress,
       city: ClientCity,
@@ -75,8 +81,9 @@ export const addInvoice = async (
       postCode: ClientPostCode,
       invoiceId: InvoiceId,
     },
-  });
-  await db.item.createMany({
+  }));
+  
+  promises.push(db.item.createMany({
     data: items.map((item) => ({
       invoiceId: InvoiceId,
       price: parseFloat(item.price),
@@ -84,5 +91,83 @@ export const addInvoice = async (
       total: item.total,
       itemName: item.ItemName,
     })),
-  });
+  }));
+  
+  await Promise.all(promises);
+};
+
+
+export const addInvoiceDraft = async (
+  values: z.infer<typeof BillFormSchema>,
+  total: number,
+  invoiceDate: Date,
+  paymentDue: string,
+  items: ItemProps[],
+) => {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { error: "NOT AUTHORIZED" };
+
+  
+  const {
+    ClientCity,
+    ClientCountry,
+    ClientPostCode,
+    ClientStreetAddress,
+    Description,
+    city,
+    clientEmail,
+    clientName,
+    country,
+    postCode,
+    streetAddress,
+  } = values;
+  
+  const InvoiceId = uuid().substring(0,5);
+
+  
+  promises.push(db.invoice.create({
+    data: {
+      id: InvoiceId,
+      userId: userId,
+      clientEmail: clientEmail,
+      clientName: clientName,
+      description: Description,
+      paymentDue: paymentDue,
+      invoiceDate: invoiceDate,
+      total: total,
+    },
+  }));
+  
+  promises.push(db.senderAddress.create({
+    data: {
+      street: streetAddress,
+      city: city,
+      country: country,
+      postCode: postCode,
+      invoiceId: InvoiceId,
+    },
+  }));
+  
+  promises.push(db.clientAddress.create({
+    data: {
+      street: ClientStreetAddress,
+      city: ClientCity,
+      country: ClientCountry,
+      postCode: ClientPostCode,
+      invoiceId: InvoiceId,
+    },
+  }));
+  
+  promises.push(db.item.createMany({
+    data: items.map((item) => ({
+      invoiceId: InvoiceId,
+      price: parseFloat(item.price) > 0 ? parseFloat(item.price): 0 ,
+      quantity: parseInt(item.quantity),
+      total: item.total,
+      itemName: item.ItemName,
+    })),
+  }));
+  
+  await Promise.all(promises);
 };

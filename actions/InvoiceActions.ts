@@ -31,21 +31,10 @@ export const deleteInvoice = async (id: string) => {
   const clientAddress = await db.clientAddress.findFirst({
     where: { invoiceId: id },
   });
-  const items = await db.item.findMany({
-    where: { invoiceId: id },
-  });
   await Promise.all([
-    db.clientAddress.delete({
-      where: { id: clientAddress?.id },
-    }),
-    db.senderAddress.delete({
-      where: { id: senderAddress?.id },
-    }),
-    db.item.deleteMany({
-      where: { id: items[0]?.id },
-    }),
-    db.invoice.delete({
-      where: { id },
-    }),
+    senderAddress && db.senderAddress.delete({ where: { id: senderAddress.id } }),
+    clientAddress && db.clientAddress.delete({ where: { id: clientAddress.id } }),
+    db.item.deleteMany({ where: { invoiceId: id } }),
+    db.invoice.delete({ where: { id: id } }),
   ]);
 };

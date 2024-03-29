@@ -72,10 +72,10 @@ export const SingleInvoice = ({ invoice }: SingleInvoiceProps) => {
         <div className="flex items-center  ">
           <b className="mr-10 text-dark ">{formattedPrice}</b>
           <div
-            className={`w-[104px] h-10 text-[${background}] bg-[${background}] bg-opacity-10 rounded-md flex items-center justify-center gap-2`}
+            className={`w-[104px] h-10  bg-[${background}] bg-opacity-10 rounded-md flex items-center justify-center gap-2`}
           >
             <div className={`w-2 h-2 rounded-full bg-[${background}]`} />
-            <b className={` capitalize`}>{invoice.status}</b>
+            <b className={`text-[${background}] capitalize`}>{invoice.status}</b>
           </div>
 
           <Button

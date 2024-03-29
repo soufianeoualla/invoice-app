@@ -19,7 +19,7 @@ import { PaymentDue } from "./PaymentDue";
 import { Button } from "@/components/ui/button";
 import { useContext, useState, useTransition } from "react";
 import { AddEditModalContext } from "@/context/AddEditModalContext";
-import { addInvoice } from "@/actions/addInvoice";
+import { addInvoice, addInvoiceDraft } from "@/actions/addInvoice";
 
 interface ItemProps {
   ItemName: string;
@@ -97,13 +97,11 @@ export const BillForm = () => {
     });
     setError(errors ? errors : undefined);
 
-    if (errors) return false;
-    return true;
+  
   };
   const onSave = (values: z.infer<typeof BillFormSchema>) => {
-    const valid = validateItems();
-    if (!valid) return;
-    console.log(valid);
+   validateItems()
+   if(error?.ItemName || error?.price || error?.quantity) return
     startTransition(() => {
       addInvoice(
         values,
@@ -111,11 +109,24 @@ export const BillForm = () => {
         date as Date,
         paymentDue as string,
         items,
-        "pending"
+        
       );
       toggle();
     });
   };
+  const onSaveDraft = () => {
+    const values = form.getValues()
+     startTransition(() => {
+       addInvoiceDraft(
+         values,
+         total,
+         date as Date,
+         paymentDue as string,
+         items,
+       );
+       toggle();
+     });
+   };
 
   return (
     <div>
@@ -311,12 +322,15 @@ export const BillForm = () => {
               </Button>
               <div className="space-x-2">
                 <Button
+                onClick={onSaveDraft}
+                type="button"
                   disabled={isPending}
                   className="bg-Dusty-Aqua text-Soft-Teal h-12 pt-3 w-[133px] font-bold text-[15px] rounded-3xl hover:bg-dark"
                 >
                   Save as Draft
                 </Button>
                 <Button
+                 type="submit"
                   disabled={isPending}
                   className="font-bold text-[15px]  h-12 pt-3 w-[133px] rounded-3xl"
                 >

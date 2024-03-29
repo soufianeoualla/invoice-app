@@ -4,10 +4,10 @@ import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { getSingleInvoice } from "@/data/singleInvoice";
 import { formatDate, formatPrice } from "@/lib/functions";
-import { Item } from "@radix-ui/react-dropdown-menu";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
+import { DeleteModal } from "./DeleteModal";
 
 interface AddressProps {
   id: number;
@@ -47,8 +47,10 @@ interface InvoiceProps {
 
 export const ViewInvoice = () => {
   const [invoice, setInvoice] = useState<InvoiceProps>();
+  const [deleteModal, setDeleteModal] = useState<boolean>(false);
+
   const searchParams = useSearchParams();
-  const router = useRouter()
+  const router = useRouter();
   const id = searchParams.get("id");
 
   const getData = useCallback(async () => {
@@ -82,15 +84,13 @@ export const ViewInvoice = () => {
       ? "#FF8F00"
       : "emerald-500";
 
-      const onDelete = ()=>{
-        deleteInvoice(invoice.id)
-        router.push('/dashboard')
-      }
-
   return (
     <>
       <div className="w-[730px] mt-[50px] mx-auto ">
         <Button
+          onClick={() => {
+            router.back();
+          }}
           variant={"ghost"}
           className="flex items-center gap-6 font-bold hover:bg-transparent"
         >
@@ -119,17 +119,19 @@ export const ViewInvoice = () => {
               Edit
             </Button>
             <Button
-              onClick={onDelete}
+              onClick={() => setDeleteModal(true)}
               className="bg-destructive/90 pt-3 hover:bg-destructive/75 text-white rounded-3xl w-[89px] h-12 text-[15px] font-bold tracking-wide"
             >
               Delete
             </Button>
-            {invoice.status !=='paid' && <Button
-              onClick={() => markAsPaid(invoice.id)}
-              className="rounded-3xl w-[131px] pt-3 h-12 text-[15px] font-bold tracking-wide"
-            >
-              Mark as Paid{" "}
-            </Button>}
+            {invoice.status === "pending" && (
+              <Button
+                onClick={() => markAsPaid(invoice.id)}
+                className="rounded-3xl w-[131px] pt-3 h-12 text-[15px] font-bold tracking-wide"
+              >
+                Mark as Paid{" "}
+              </Button>
+            )}
           </div>
         </div>
 
@@ -141,7 +143,7 @@ export const ViewInvoice = () => {
                 {invoice.id}
               </strong>
               <span className="text-Subtle-Turquoise text-[13px] font-medium">
-                {invoice.description}
+                {invoice?.description}
               </span>
             </div>
             <div className="text-Subtle-Turquoise text-[13px] font-medium text-right">
@@ -154,7 +156,7 @@ export const ViewInvoice = () => {
             </div>
           </div>
 
-          <div className="text-dark flex gap-[20%] items-start mt-5">
+          <div className="text-dark flex gap-[12%] items-start mt-5">
             <div className="space-y-8">
               <div className="grid gap-2">
                 <span className="text-Subtle-Turquoise text-[13px] font-medium">
@@ -177,10 +179,10 @@ export const ViewInvoice = () => {
               </span>
               <strong>{invoice.clientName}</strong>
               <p className="text-Subtle-Turquoise font-medium text-[13px]">
-                {invoice.clientAddress[0].street} <br />{" "}
-                {invoice.clientAddress[0].city} <br />
-                {invoice.clientAddress[0].postCode} <br />{" "}
-                {invoice.clientAddress[0].country}
+                {invoice.clientAddress[0]?.street} <br />{" "}
+                {invoice.clientAddress[0]?.city} <br />
+                {invoice.clientAddress[0]?.postCode} <br />{" "}
+                {invoice.clientAddress[0]?.country}
               </p>
             </div>
 
@@ -200,7 +202,7 @@ export const ViewInvoice = () => {
                 <th>Price</th>
                 <th>Total</th>
               </tr>
-              {invoice.item.map((item) => (
+              {invoice.item?.map((item) => (
                 <tr key={item.id}>
                   <td>{item.itemName}</td>
                   <td className="text-Subtle-Turquoise">{item.quantity}</td>
@@ -218,6 +220,9 @@ export const ViewInvoice = () => {
           </div>
         </div>
       </div>
+      {deleteModal && (
+        <DeleteModal id={invoice.id} setDeleteModal={setDeleteModal} />
+      )}
     </>
   );
 };
