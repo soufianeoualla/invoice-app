@@ -1,15 +1,17 @@
-import { ViewInvoice } from '@/components/dashboard/modals/ViewInvoice'
-import React, { Suspense } from 'react'
+import { ViewInvoice } from "@/components/dashboard/modals/ViewInvoice";
+import { AddEditModalProvider } from "@/context/AddEditModalContext";
+import React, { Suspense } from "react";
 
-const ViewIncoicePage =  () => {
+const ViewIncoicePage = () => {
   return (
     <>
-    <Suspense>
-
-    <ViewInvoice/>
-    </Suspense>
+      <Suspense>
+        <AddEditModalProvider>
+          <ViewInvoice />
+        </AddEditModalProvider>
+      </Suspense>
     </>
-  )
-}
+  );
+};
 
-export default ViewIncoicePage
+export default ViewIncoicePage;

@@ -12,5 +12,6 @@ export const getInvoices = async () => {
   return await db.invoice.findMany({
     where: { userId: userId },
     include: { clientAddress: true, item: true, senderAddress: true },
+    orderBy:{updatedAt:'desc'}
   });
 };

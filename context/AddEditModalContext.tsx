@@ -20,7 +20,6 @@ export const AddEditModalProvider = ({ children }: { children: ReactNode }) => {
 
   const toggle = () => {
     setAddEditModal(!addEditModal);
-    console.log('clicked')
   };
 
   return (

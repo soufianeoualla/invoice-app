@@ -14,10 +14,11 @@ interface ItemProps {
 }
 
 
-const promises:any = [];
 
 
 export const addInvoice = async (
+ 
+
   values: z.infer<typeof BillFormSchema>,
   total: number,
   invoiceDate: Date,
@@ -47,6 +48,7 @@ export const addInvoice = async (
   } = validateFields.data;
   const status = "pending";
   const InvoiceId = uuid().substring(0,5);
+  const promises:any = [];
 
   
   promises.push(db.invoice.create({
@@ -124,6 +126,7 @@ export const addInvoiceDraft = async (
   } = values;
   
   const InvoiceId = uuid().substring(0,5);
+  const promises:any = [];
 
   
   promises.push(db.invoice.create({

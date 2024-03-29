@@ -33,9 +33,11 @@ interface errorProp {
   quantity: string;
   price: string;
 }
-export const BillForm = () => {
+interface EditProp{
+  edit : boolean
+}
+export const BillForm = ({edit}:EditProp) => {
   const { toggle } = useContext(AddEditModalContext);
-
   const form = useForm<z.infer<typeof BillFormSchema>>({
     resolver: zodResolver(BillFormSchema),
     defaultValues: {

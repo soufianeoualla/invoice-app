@@ -3,42 +3,9 @@ import { Button } from "../ui/button";
 import { MdChevronRight } from "react-icons/md";
 import Link from "next/link";
 import { formatDate, formatPrice } from "@/lib/functions";
+import { InvoiceProps } from "@/lib/interfaces";
 
-interface AddressProps {
-  id: number;
-  street: string;
-  city: string;
-  postCode: string;
-  country: string;
-  invoiceId: string;
-}
 
-interface ItemProps {
-  id: number;
-  itemName: string;
-  quantity: number;
-  price: number;
-  total: number;
-  invoiceId: string;
-}
-
-interface InvoiceProps {
-  id: string;
-  description: string | null;
-  clientName: string;
-  clientEmail: string;
-  total: number;
-  status: string;
-  createdAt: Date | string;
-  invoiceDate: Date | string;
-  paymentDue: string;
-  updatedAt: Date | string;
-  userId: string;
-  clientAddress: AddressProps[];
-  item: ItemProps[];
-  senderAddress: AddressProps[];
-  error: string;
-}
 interface SingleInvoiceProps {
   invoice: InvoiceProps;
 }
@@ -48,12 +15,12 @@ export const SingleInvoice = ({ invoice }: SingleInvoiceProps) => {
 
   const formattedPrice = formatPrice(invoice.total);
 
-  const background =
-    invoice.status === "draft"
-      ? "#373B53"
-      : invoice.status === "pending"
-      ? "#FF8F00"
-      : "emerald-500";
+  const statusColors =
+    invoice.status === "pending"
+      ? "bg-pending text-pending"
+      : invoice.status === "paid"
+      ? "bg-emerald-500 text-emerald-500"
+      : "bg-draft text-draft";
 
   return (
     <Link href={`/dashboard/invoice?id=${invoice.id}`}>
@@ -69,13 +36,13 @@ export const SingleInvoice = ({ invoice }: SingleInvoiceProps) => {
           <p className="text-Soft-Teal ">{invoice.clientName}</p>
         </div>
 
-        <div className="flex items-center  ">
-          <b className="mr-10 text-dark ">{formattedPrice}</b>
+        <div className="flex items-center   ">
+          <b className=" mr-12 text-dark ">{formattedPrice}</b>
           <div
-            className={`w-[104px] h-10  bg-[${background}] bg-opacity-10 rounded-md flex items-center justify-center gap-2`}
+            className={`w-[104px] h-10   bg-opacity-10 rounded-md flex items-center justify-center gap-2 ${statusColors}`}
           >
-            <div className={`w-2 h-2 rounded-full bg-[${background}]`} />
-            <b className={`text-[${background}] capitalize`}>{invoice.status}</b>
+            <div className={`w-2 h-2 rounded-full ${statusColors} `} />
+            <b className={` capitalize`}>{invoice.status}</b>
           </div>
 
           <Button

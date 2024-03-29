@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { getSingleInvoice } from "@/data/singleInvoice";
 import { formatDate, formatPrice } from "@/lib/functions";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { DeleteModal } from "./DeleteModal";
+import { AddEditModalContext } from "@/context/AddEditModalContext";
+import { AddEditInvoice } from "./AddEditInvoice";
 
 interface AddressProps {
   id: number;
@@ -46,6 +48,7 @@ interface InvoiceProps {
 }
 
 export const ViewInvoice = () => {
+  const{addEditModal,toggle} =useContext(AddEditModalContext)
   const [invoice, setInvoice] = useState<InvoiceProps>();
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
 
@@ -58,7 +61,7 @@ export const ViewInvoice = () => {
     const response = await getSingleInvoice(id);
     if (!response) return;
     setInvoice(response as InvoiceProps);
-  }, [id]);
+  },[id]);
 
   useEffect(() => {
     getData();
@@ -77,12 +80,12 @@ export const ViewInvoice = () => {
   paymentDueDate.setDate(
     paymentDueDate.getDate() + parseInt(invoice.paymentDue)
   );
-  const background =
-    invoice.status === "draft"
-      ? "#373B53"
-      : invoice.status === "pending"
-      ? "#FF8F00"
-      : "emerald-500";
+  const statusColors =
+  invoice.status === "pending"
+    ? "bg-pending text-pending"
+    : invoice.status === "paid"
+    ? "bg-emerald-500 text-emerald-500"
+    : "bg-draft text-draft";
 
   return (
     <>
@@ -92,7 +95,7 @@ export const ViewInvoice = () => {
             router.back();
           }}
           variant={"ghost"}
-          className="flex items-center gap-6 font-bold hover:bg-transparent"
+          className="flex items-center gap-6 font-bold hover:bg-transparent focus:text-primary"
         >
           <FaChevronLeft className="text-primary w-4 h-4 " />
           Go back
@@ -104,20 +107,22 @@ export const ViewInvoice = () => {
               Status
             </small>
             <div
-              className={`w-[104px] h-10 text-[${background}] bg-[${background}] bg-opacity-10 rounded-md flex items-center justify-center gap-2`}
+              className={`w-[104px] h-10 ${statusColors}  bg-opacity-10 rounded-md flex items-center justify-center gap-2`}
             >
-              <div className={`w-2 h-2 rounded-full bg-[${background}]`} />
+              <div className={`w-2 h-2 rounded-full ${statusColors} `} />
               <b className={` capitalize`}>{invoice.status}</b>
             </div>
           </div>
 
           <div className="space-x-2">
             <Button
+            onClick={()=>{toggle; console.log('clicked')}}
               variant={"ghost"}
-              className="text-Subtle-Turquoise font-bold hover:text-primary text-[15px] hover:bg-transparent "
+              className="text-Subtle-Turquoise font-bold hover:text-primary text-[15px] hover:bg-transparent focus:text-primary "
             >
               Edit
             </Button>
+
             <Button
               onClick={() => setDeleteModal(true)}
               className="bg-destructive/90 pt-3 hover:bg-destructive/75 text-white rounded-3xl w-[89px] h-12 text-[15px] font-bold tracking-wide"
@@ -202,7 +207,7 @@ export const ViewInvoice = () => {
                 <th>Price</th>
                 <th>Total</th>
               </tr>
-              {invoice.item?.map((item) => (
+              {invoice.item.map((item) => (
                 <tr key={item.id}>
                   <td>{item.itemName}</td>
                   <td className="text-Subtle-Turquoise">{item.quantity}</td>
@@ -223,6 +228,8 @@ export const ViewInvoice = () => {
       {deleteModal && (
         <DeleteModal id={invoice.id} setDeleteModal={setDeleteModal} />
       )}
+
+      {addEditModal && <AddEditInvoice edit />}
     </>
   );
 };

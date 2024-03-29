@@ -19,6 +19,7 @@ const config: Config = {
     },
     extend: {
       colors: {
+        'draft':'#373B53',
         'pending':'#FF8F00',
         'light': 'hsl(240, 27%, 98%)',
         'dark':'hsl(233, 30%, 11%)',
