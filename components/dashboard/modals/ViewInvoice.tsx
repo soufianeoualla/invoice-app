@@ -116,7 +116,7 @@ export const ViewInvoice = () => {
 
           <div className="space-x-2">
             <Button
-            onClick={()=>{toggle; console.log('clicked')}}
+            onClick={()=>{toggle()}}
               variant={"ghost"}
               className="text-Subtle-Turquoise font-bold hover:text-primary text-[15px] hover:bg-transparent focus:text-primary "
             >
@@ -143,8 +143,8 @@ export const ViewInvoice = () => {
         <div className="mt-6 bg-white rounded-lg p-12">
           <div className="flex items-center justify-between">
             <div className="grid gap-y-2">
-              <strong className="text-dark">
-                <span className="text-Subtle-Turquoise">#</span>
+              <strong className="text-dark uppercase">
+                <span className="text-Subtle-Turquoise ">#</span>
                 {invoice.id}
               </strong>
               <span className="text-Subtle-Turquoise text-[13px] font-medium">
@@ -182,7 +182,7 @@ export const ViewInvoice = () => {
               <span className="text-Subtle-Turquoise font-medium text-[13px]">
                 Bill to
               </span>
-              <strong>{invoice.clientName}</strong>
+              <strong className="capitalize">{invoice.clientName}</strong>
               <p className="text-Subtle-Turquoise font-medium text-[13px]">
                 {invoice.clientAddress[0]?.street} <br />{" "}
                 {invoice.clientAddress[0]?.city} <br />
@@ -229,7 +229,7 @@ export const ViewInvoice = () => {
         <DeleteModal id={invoice.id} setDeleteModal={setDeleteModal} />
       )}
 
-      {addEditModal && <AddEditInvoice edit />}
+      {addEditModal && <AddEditInvoice edit invoice={invoice} />}
     </>
   );
 };

@@ -26,7 +26,7 @@ export const DeleteModal = ({ id, setDeleteModal }: DeleteModalProp) => {
           Confirm Deletion
         </h1>
         <p className="text-Soft-Teal text-[13px]">
-          Are you sure you want to delete invoice #{id}? This action cannot be
+          Are you sure you want to delete invoice <span className="uppercase">#{id}</span>? This action cannot be
           undone.
         </p>
         <div className="flex justify-end items-center mt-4">

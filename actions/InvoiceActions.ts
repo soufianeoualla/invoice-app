@@ -19,22 +19,49 @@ export const markAsPaid = async (id: string) => {
 };
 
 export const deleteInvoice = async (id: string) => {
-  const existingInvoice = await db.invoice.findUnique({
-    where: { id: id },
-  });
-  if (!existingInvoice) return { error: "Invoice not found" };
-  const existingUser = await getUserById(existingInvoice.userId);
-  if (!existingUser) return { error: "User not found" };
-  const senderAddress = await db.senderAddress.findFirst({
-    where: { invoiceId: id },
-  });
-  const clientAddress = await db.clientAddress.findFirst({
-    where: { invoiceId: id },
-  });
-  await Promise.all([
-    senderAddress && db.senderAddress.delete({ where: { id: senderAddress.id } }),
-    clientAddress && db.clientAddress.delete({ where: { id: clientAddress.id } }),
-    db.item.deleteMany({ where: { invoiceId: id } }),
-    db.invoice.delete({ where: { id: id } }),
-  ]);
+  try {
+    const existingInvoice = await db.invoice.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        senderAddress: true,
+        clientAddress: true,
+        item: true,
+      },
+    });
+    if (!existingInvoice) return { error: "Invoice not found" };
+
+    const existingUser = await getUserById(existingInvoice.userId);
+    if (!existingUser) return { error: "User not found" };
+
+    const deletePromises = [
+      db.senderAddress.deleteMany({
+        where: {
+          invoiceId: existingInvoice.id,
+        },
+      }),
+      db.clientAddress.deleteMany({
+        where: {
+          invoiceId: existingInvoice.id,
+        },
+      }),
+      db.item.deleteMany({
+        where: {
+          invoiceId: existingInvoice.id,
+        },
+      }),
+    ];
+    await Promise.all(deletePromises);
+
+    await db.invoice.delete({
+      where: {
+        id: existingInvoice.id,
+      },
+    });
+
+    return { success: true }; 
+  } catch (error) {
+    return { error: "An error occurred while deleting the invoice" };
+  }
 };

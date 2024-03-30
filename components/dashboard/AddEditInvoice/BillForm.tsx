@@ -20,59 +20,63 @@ import { Button } from "@/components/ui/button";
 import { useContext, useState, useTransition } from "react";
 import { AddEditModalContext } from "@/context/AddEditModalContext";
 import { addInvoice, addInvoiceDraft } from "@/actions/addInvoice";
+import { InvoiceProps, Item } from "@/lib/interfaces";
 
-interface ItemProps {
-  ItemName: string;
-  quantity: string;
-  price: string;
-  total: number;
-  id: string;
-}
 interface errorProp {
   ItemName: string;
   quantity: string;
   price: string;
 }
-interface EditProp{
-  edit : boolean
+interface EditProp {
+  edit: boolean;
+  invoice: InvoiceProps;
 }
-export const BillForm = ({edit}:EditProp) => {
+export const BillForm = ({ edit, invoice }: EditProp) => {
+  console.log(invoice);
   const { toggle } = useContext(AddEditModalContext);
   const form = useForm<z.infer<typeof BillFormSchema>>({
     resolver: zodResolver(BillFormSchema),
     defaultValues: {
-      city: "",
-      country: "",
-      postCode: "",
-      streetAddress: "",
-      ClientCity: "",
-      ClientCountry: "",
-      clientEmail: "",
-      clientName: "",
-      ClientPostCode: "",
-      ClientStreetAddress: "",
-      Description: "",
+      city: edit ? invoice?.senderAddress[0]?.city : "",
+      country: edit ? invoice?.senderAddress[0]?.country : "",
+      postCode: edit ? invoice?.senderAddress[0]?.postCode : "",
+      streetAddress: edit ? invoice?.senderAddress[0]?.street : "",
+      ClientCity: edit ? invoice?.clientAddress[0]?.city : "",
+      ClientCountry: edit ? invoice?.clientAddress[0]?.country : "",
+      clientEmail: edit ? invoice?.clientEmail : "",
+      clientName: edit ? invoice?.clientName : "",
+      ClientPostCode: edit ? invoice?.clientAddress[0]?.postCode : "",
+      ClientStreetAddress: edit ? invoice?.clientAddress[0]?.street : "",
+      Description: edit ? (invoice?.description as string) : "",
     },
   });
 
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const [paymentDue, setPaymentDue] = useState<string | undefined>("7");
+  const [date, setDate] = useState<Date | undefined>(
+    edit ? new Date(invoice.invoiceDate) : new Date()
+  );
+  const [paymentDue, setPaymentDue] = useState<string | undefined>(
+    edit ? invoice.paymentDue : "7"
+  );
   const [error, setError] = useState<errorProp | undefined>({
     ItemName: "",
     quantity: "",
     price: "",
   });
   const [isPending, startTransition] = useTransition();
-  const [items, setItems] = useState<ItemProps[]>([
-    {
-      ItemName: "",
-      quantity: "1",
-      price: "",
-      total: 0,
-      id: uuidv4(),
-    },
-  ]);
-  const total = items.reduce((acc, item) => acc + item.total, 0);
+  const [items, setItems] = useState<any>(
+    edit
+      ? invoice.item
+      : [
+          {
+            ItemName: "",
+            quantity: "1",
+            price: "",
+            total: 0,
+            id: uuidv4(),
+          },
+        ]
+  );
+  const total = items.reduce((acc: number, item: any) => acc + item.total, 0);
 
   const validateItems = () => {
     const errors: errorProp = {
@@ -80,7 +84,7 @@ export const BillForm = ({edit}:EditProp) => {
       quantity: "",
       price: "",
     };
-    items.forEach((item) => {
+    items.forEach((item: any) => {
       if (item.ItemName.trim() === "") {
         errors.ItemName = "Item name cannot be empty";
       }
@@ -98,37 +102,22 @@ export const BillForm = ({edit}:EditProp) => {
       }
     });
     setError(errors ? errors : undefined);
-
-  
   };
   const onSave = (values: z.infer<typeof BillFormSchema>) => {
-   validateItems()
-   if(error?.ItemName || error?.price || error?.quantity) return
+    validateItems();
+    if (error?.ItemName || error?.price || error?.quantity) return;
     startTransition(() => {
-      addInvoice(
-        values,
-        total,
-        date as Date,
-        paymentDue as string,
-        items,
-        
-      );
+      addInvoice(values, total, date as Date, paymentDue as string, items);
       toggle();
     });
   };
   const onSaveDraft = () => {
-    const values = form.getValues()
-     startTransition(() => {
-       addInvoiceDraft(
-         values,
-         total,
-         date as Date,
-         paymentDue as string,
-         items,
-       );
-       toggle();
-     });
-   };
+    const values = form.getValues();
+    startTransition(() => {
+      addInvoiceDraft(values, total, date as Date, paymentDue as string, items);
+      toggle();
+    });
+  };
 
   return (
     <div>
@@ -324,15 +313,15 @@ export const BillForm = ({edit}:EditProp) => {
               </Button>
               <div className="space-x-2">
                 <Button
-                onClick={onSaveDraft}
-                type="button"
+                  onClick={onSaveDraft}
+                  type="button"
                   disabled={isPending}
                   className="bg-Dusty-Aqua text-Soft-Teal h-12 pt-3 w-[133px] font-bold text-[15px] rounded-3xl hover:bg-dark"
                 >
                   Save as Draft
                 </Button>
                 <Button
-                 type="submit"
+                  type="submit"
                   disabled={isPending}
                   className="font-bold text-[15px]  h-12 pt-3 w-[133px] rounded-3xl"
                 >

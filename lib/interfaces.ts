@@ -7,7 +7,7 @@ interface AddressProps {
   invoiceId: string;
 }
 
-interface ItemProps {
+export interface Item {
   id: number;
   itemName: string;
   quantity: number;
@@ -29,7 +29,7 @@ export interface InvoiceProps {
   updatedAt: Date | string;
   userId: string;
   clientAddress: AddressProps[];
-  item: ItemProps[];
+  item: Item[];
   senderAddress: AddressProps[];
   error: string;
 }
