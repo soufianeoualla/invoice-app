@@ -9,9 +9,11 @@ import Loading from "../Loading";
 import { InvoiceProps } from "@/lib/interfaces";
 import Image from "next/image";
 import ullistration from "@/components/assets/illustration-empty.svg";
+import { TriggerContext } from "@/context/TriggerContext";
 
 export const DashboardWrapper = () => {
   const { addEditModal } = useContext(AddEditModalContext);
+  const {trigger} = useContext(TriggerContext)
 
   const [invoices, setInvoices] = useState<InvoiceProps[]>([]);
   useEffect(() => {
@@ -20,7 +22,7 @@ export const DashboardWrapper = () => {
       setInvoices(response as InvoiceProps[]);
     };
     getData();
-  }, []);
+  }, [trigger]);
   const filters = ["draft", "pending", "paid"];
   const [checked, setChecked] = useState<Array<string>>([]);
 
@@ -62,7 +64,7 @@ export const DashboardWrapper = () => {
         )}
       </div>
 
-      {addEditModal && <AddEditInvoice edit={false} />}
+      {addEditModal && <AddEditInvoice   edit={false} />}
     </>
   );
 };

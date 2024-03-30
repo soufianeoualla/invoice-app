@@ -2,7 +2,8 @@
 import { deleteInvoice } from "@/actions/InvoiceActions";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { PopUpMessage } from "./PopUpMessage";
 
 interface DeleteModalProp {
   id: string;
@@ -11,9 +12,21 @@ interface DeleteModalProp {
 
 export const DeleteModal = ({ id, setDeleteModal }: DeleteModalProp) => {
   const router = useRouter();
+  const [error, setError] = useState<string | undefined>();
+  const [success, setSuccess] = useState<string | undefined>();
+  const [notification, setNotification] = useState<boolean>(false);
   const onDelete = () => {
-    deleteInvoice(id);
-    router.push("/dashboard");
+    deleteInvoice(id).then((data) => {
+      setError(data.error);
+      setSuccess(data.success);
+    });
+    setNotification(true)
+    setTimeout(() => {
+      router.push("/dashboard");
+      setTimeout(() => {
+        setNotification(false);
+      }, 3000);
+    }, 3000);
   };
   return (
     <>
@@ -26,7 +39,8 @@ export const DeleteModal = ({ id, setDeleteModal }: DeleteModalProp) => {
           Confirm Deletion
         </h1>
         <p className="text-Soft-Teal text-[13px]">
-          Are you sure you want to delete invoice <span className="uppercase">#{id}</span>? This action cannot be
+          Are you sure you want to delete invoice{" "}
+          <span className="uppercase">#{id}</span>? This action cannot be
           undone.
         </p>
         <div className="flex justify-end items-center mt-4">
@@ -46,6 +60,7 @@ export const DeleteModal = ({ id, setDeleteModal }: DeleteModalProp) => {
           </Button>
         </div>
       </div>
+      {notification && <PopUpMessage error={error} success={success} />}
     </>
   );
 };

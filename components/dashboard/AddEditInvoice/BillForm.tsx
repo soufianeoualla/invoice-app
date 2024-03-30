@@ -21,19 +21,25 @@ import { useContext, useState, useTransition } from "react";
 import { AddEditModalContext } from "@/context/AddEditModalContext";
 import { addInvoice, addInvoiceDraft } from "@/actions/addInvoice";
 import { InvoiceProps, Item } from "@/lib/interfaces";
+import { PopUpMessage } from "../modals/PopUpMessage";
+import { editInvoice } from "@/actions/editInvoice";
+import { TriggerContext } from "@/context/TriggerContext";
 
 interface errorProp {
-  ItemName: string;
+  itemName: string;
   quantity: string;
   price: string;
 }
 interface EditProp {
-  edit: boolean;
-  invoice: InvoiceProps;
+  edit: boolean | undefined;
+  invoice: InvoiceProps ;
 }
 export const BillForm = ({ edit, invoice }: EditProp) => {
-  console.log(invoice);
+  const { triggerToggle } = useContext(TriggerContext);
   const { toggle } = useContext(AddEditModalContext);
+  const [error, setError] = useState<string | undefined>();
+  const [success, setSuccess] = useState<string | undefined>();
+  const [notification, setNotification] = useState<boolean>(false);
   const form = useForm<z.infer<typeof BillFormSchema>>({
     resolver: zodResolver(BillFormSchema),
     defaultValues: {
@@ -57,8 +63,8 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
   const [paymentDue, setPaymentDue] = useState<string | undefined>(
     edit ? invoice.paymentDue : "7"
   );
-  const [error, setError] = useState<errorProp | undefined>({
-    ItemName: "",
+  const [itemError, setItemError] = useState<errorProp | undefined>({
+    itemName: "",
     quantity: "",
     price: "",
   });
@@ -68,9 +74,9 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
       ? invoice.item
       : [
           {
-            ItemName: "",
-            quantity: "1",
-            price: "",
+            itemName: "",
+            quantity: 1,
+            price: 0,
             total: 0,
             id: uuidv4(),
           },
@@ -80,35 +86,63 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
 
   const validateItems = () => {
     const errors: errorProp = {
-      ItemName: "",
+      itemName: "",
       quantity: "",
       price: "",
     };
     items.forEach((item: any) => {
-      if (item.ItemName.trim() === "") {
-        errors.ItemName = "Item name cannot be empty";
+      if (item.itemName === "") {
+        errors.itemName = "Item name cannot be empty";
       }
 
-      if (item.quantity.trim() === "") {
+      if (item.quantity === "") {
         errors.quantity = "Quantity cannot be empty";
       } else if (parseInt(item.quantity) < 1) {
         errors.quantity = "Quantity must be greater than one";
       }
 
-      if (item.price.trim() === "") {
+      if (item.price === "") {
         errors.price = "price cannot be empty";
       } else if (parseInt(item.price) < 1) {
         errors.quantity = "price must be greater than one";
       }
     });
-    setError(errors ? errors : undefined);
+    setItemError(errors ? errors : undefined);
   };
   const onSave = (values: z.infer<typeof BillFormSchema>) => {
     validateItems();
-    if (error?.ItemName || error?.price || error?.quantity) return;
+    if (itemError?.itemName || itemError?.price || itemError?.quantity) return;
     startTransition(() => {
-      addInvoice(values, total, date as Date, paymentDue as string, items);
-      toggle();
+      edit
+        ? editInvoice(
+            values,
+            total,
+            date as Date,
+            paymentDue as string,
+            items,
+            invoice.id
+          ).then((data) => {
+            setError(data.error);
+            setSuccess(data.success);
+          })
+        : addInvoice(
+            values,
+            total,
+            date as Date,
+            paymentDue as string,
+            items
+          ).then((data) => {
+            setError(data.error);
+            setSuccess(data.success);
+          });
+      triggerToggle();
+      setNotification(true);
+      setTimeout(() => {
+        toggle();
+        setTimeout(() => {
+          setNotification(false);
+        }, 3000);
+      }, 3000);
     });
   };
   const onSaveDraft = () => {
@@ -120,32 +154,18 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
   };
 
   return (
-    <div>
-      <h2 className="text-primary mb-6 font-bold">Bill Form</h2>
+    <>
+      <div>
+        <h2 className="text-primary mb-6 font-bold">Bill Form</h2>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSave)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="streetAddress"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Street Address</FormLabel>
-                <FormControl>
-                  <Input disabled={isPending} placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="flex items-center gap-x-6">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSave)} className="space-y-6">
             <FormField
               control={form.control}
-              name="city"
+              name="streetAddress"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>City</FormLabel>
+                  <FormLabel>Street Address</FormLabel>
                   <FormControl>
                     <Input disabled={isPending} placeholder="" {...field} />
                   </FormControl>
@@ -154,184 +174,201 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="postCode"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Post Code</FormLabel>
-                  <FormControl>
-                    <Input disabled={isPending} placeholder="" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="country"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Country</FormLabel>
-                  <FormControl>
-                    <Input disabled={isPending} placeholder="" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <h2 className="text-primary mb-6 font-bold">Bill To</h2>
-          <FormField
-            control={form.control}
-            name="clientName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Client&lsquo;s Name</FormLabel>
-                <FormControl>
-                  <Input disabled={isPending} placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="clientEmail"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Client&lsquo;s Email</FormLabel>
-                <FormControl>
-                  <Input disabled={isPending} placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="ClientStreetAddress"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Street Address</FormLabel>
-                <FormControl>
-                  <Input disabled={isPending} placeholder="" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <div className="flex items-center gap-x-6">
+              <FormField
+                control={form.control}
+                name="city"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>City</FormLabel>
+                    <FormControl>
+                      <Input disabled={isPending} placeholder="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <div className="flex items-center gap-x-6">
-            <FormField
-              control={form.control}
-              name="ClientCity"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>City</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="ClientPostCode"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Post Code</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="ClientCountry"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Country</FormLabel>
-                  <FormControl>
-                    <Input placeholder="" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className=" flex items-center justify-between w-full ">
-            <div className="space-y-2 w-[48%]">
-              <span className="text-[13px] text-Subtle-Turquoise font-medium ">
-                Invoice Date
-              </span>
-              <DatePicker setDate={setDate} date={date} />
+              <FormField
+                control={form.control}
+                name="postCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Post Code</FormLabel>
+                    <FormControl>
+                      <Input disabled={isPending} placeholder="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="country"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Country</FormLabel>
+                    <FormControl>
+                      <Input disabled={isPending} placeholder="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-            <PaymentDue setPaymentDue={setPaymentDue} />
-          </div>
-          <FormField
-            control={form.control}
-            name="Description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Project Description</FormLabel>
-                <FormControl>
-                  <Input
-                    disabled={isPending}
-                    className="w-full"
-                    type="text"
-                    placeholder=""
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="space-y-10">
-            <ItemList setItems={setItems} items={items} />
+            <h2 className="text-primary mb-6 font-bold">Bill To</h2>
+            <FormField
+              control={form.control}
+              name="clientName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Client&lsquo;s Name</FormLabel>
+                  <FormControl>
+                    <Input disabled={isPending} placeholder="" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="clientEmail"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Client&lsquo;s Email</FormLabel>
+                  <FormControl>
+                    <Input disabled={isPending} placeholder="" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="ClientStreetAddress"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Street Address</FormLabel>
+                  <FormControl>
+                    <Input disabled={isPending} placeholder="" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            <div className="text-[12px] text-destructive grid capitalize">
-              <em> {error?.ItemName}</em>
-              <em> {error?.quantity}</em>
-              <em> {error?.price}</em>
+            <div className="flex items-center gap-x-6">
+              <FormField
+                control={form.control}
+                name="ClientCity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>City</FormLabel>
+                    <FormControl>
+                      <Input placeholder="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="ClientPostCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Post Code</FormLabel>
+                    <FormControl>
+                      <Input placeholder="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="ClientCountry"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Country</FormLabel>
+                    <FormControl>
+                      <Input placeholder="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
-            <div className="flex justify-between items-center ">
-              <Button
-                variant={"ghost"}
-                type="button"
-                onClick={toggle}
-                disabled={isPending}
-                className="text-light-purple pt-3 hover:bg-transparent hover:text-dark text-sm font-bold"
-              >
-                Discard
-              </Button>
-              <div className="space-x-2">
+            <div className=" flex items-center justify-between w-full ">
+              <div className="space-y-2 w-[48%]">
+                <span className="text-[13px] text-Subtle-Turquoise font-medium ">
+                  Invoice Date
+                </span>
+                <DatePicker setDate={setDate} date={date} />
+              </div>
+              <PaymentDue setPaymentDue={setPaymentDue} />
+            </div>
+            <FormField
+              control={form.control}
+              name="Description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Project Description</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isPending}
+                      className="w-full"
+                      type="text"
+                      placeholder=""
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="space-y-10">
+              <ItemList setItems={setItems} items={items} />
+
+              <div className="text-[12px] text-destructive grid capitalize">
+                <em> {itemError?.itemName}</em>
+                <em> {itemError?.quantity}</em>
+                <em> {itemError?.price}</em>
+              </div>
+
+              <div className="flex justify-between items-center ">
                 <Button
-                  onClick={onSaveDraft}
+                  variant={"ghost"}
                   type="button"
+                  onClick={toggle}
                   disabled={isPending}
-                  className="bg-Dusty-Aqua text-Soft-Teal h-12 pt-3 w-[133px] font-bold text-[15px] rounded-3xl hover:bg-dark"
+                  className="text-light-purple pt-3 hover:bg-transparent hover:text-dark text-sm font-bold"
                 >
-                  Save as Draft
+                  Discard
                 </Button>
-                <Button
-                  type="submit"
-                  disabled={isPending}
-                  className="font-bold text-[15px]  h-12 pt-3 w-[133px] rounded-3xl"
-                >
-                  Save & Send
-                </Button>
+                <div className="space-x-2">
+                  <Button
+                    onClick={onSaveDraft}
+                    type="button"
+                    disabled={isPending}
+                    className="bg-Dusty-Aqua text-Soft-Teal h-12 pt-3 w-[133px] font-bold text-[15px] rounded-3xl hover:bg-dark"
+                  >
+                    Save as Draft
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={isPending}
+                    className="font-bold text-[15px]  h-12 pt-3 w-[133px] rounded-3xl"
+                  >
+                    Save & Send
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        </form>
-      </Form>
-    </div>
+          </form>
+        </Form>
+      </div>
+      {notification && <PopUpMessage success={success} error={error} />}
+    </>
   );
 };

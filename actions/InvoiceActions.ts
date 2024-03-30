@@ -60,7 +60,7 @@ export const deleteInvoice = async (id: string) => {
       },
     });
 
-    return { success: true }; 
+    return { success: "Invoice successfully deleted" };
   } catch (error) {
     return { error: "An error occurred while deleting the invoice" };
   }

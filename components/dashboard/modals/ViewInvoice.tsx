@@ -1,5 +1,5 @@
 "use client";
-import { deleteInvoice, markAsPaid } from "@/actions/InvoiceActions";
+import {  markAsPaid } from "@/actions/InvoiceActions";
 import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { getSingleInvoice } from "@/data/singleInvoice";
@@ -51,7 +51,7 @@ export const ViewInvoice = () => {
   const{addEditModal,toggle} =useContext(AddEditModalContext)
   const [invoice, setInvoice] = useState<InvoiceProps>();
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
-
+  console.log(invoice)
   const searchParams = useSearchParams();
   const router = useRouter();
   const id = searchParams.get("id");

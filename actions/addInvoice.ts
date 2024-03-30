@@ -6,9 +6,9 @@ import { z } from "zod";
 import { v4 as uuid } from "uuid";
 
 interface ItemProps {
-  ItemName: string;
-  quantity: string;
-  price: string;
+  itemName: string;
+  quantity: number;
+  price: number;
   total: number;
   id: string;
 }
@@ -44,52 +44,67 @@ export const addInvoice = async (
   const status = "pending";
   const InvoiceId = uuid().substring(0, 5);
 
-  await db.invoice.create({
-    data: {
-      id: InvoiceId,
-      status: status,
-      userId: userId,
-      clientEmail: clientEmail,
-      clientName: clientName,
-      description: Description,
-      paymentDue: paymentDue,
-      invoiceDate: invoiceDate,
-      total: total,
-    },
-  });
-  const existingInvoice = await db.invoice.findUnique({
-    where:{id:InvoiceId}
-  })
+  try {
+    await db.invoice.create({
+      data: {
+        id: InvoiceId,
+        status: status,
+        userId: userId,
+        clientEmail: clientEmail,
+        clientName: clientName,
+        description: Description,
+        paymentDue: paymentDue,
+        invoiceDate: invoiceDate,
+        total: total,
+      },
+    });
+    const existingInvoice = await db.invoice.findUnique({
+      where: { id: InvoiceId },
+    });
+    const promises = [];
 
-  await db.senderAddress.create({
-    data: {
-      street: streetAddress,
-      city: city,
-      country: country,
-      postCode: postCode,
-      invoiceId: existingInvoice?.id,
-    },
-  });
+    promises.push(
+      db.senderAddress.create({
+        data: {
+          street: streetAddress,
+          city: city,
+          country: country,
+          postCode: postCode,
+          invoiceId: existingInvoice?.id,
+        },
+      })
+    );
 
-  await db.clientAddress.create({
-    data: {
-      street: ClientStreetAddress,
-      city: ClientCity,
-      country: ClientCountry,
-      postCode: ClientPostCode,
-      invoiceId: existingInvoice?.id,
-    },
-  });
+    promises.push(
+      db.clientAddress.create({
+        data: {
+          street: ClientStreetAddress,
+          city: ClientCity,
+          country: ClientCountry,
+          postCode: ClientPostCode,
+          invoiceId: existingInvoice?.id,
+        },
+      })
+    );
 
-  await db.item.createMany({
-    data: items.map((item) => ({
-      invoiceId: InvoiceId,
-      price: parseFloat(item.price),
-      quantity: parseInt(item.quantity),
-      total: item.total,
-      itemName: item.ItemName,
-    })),
-  });
+    promises.push(
+      db.item.createMany({
+        data: items.map((item) => ({
+          invoiceId: InvoiceId,
+          price: item.price,
+          quantity: item.quantity,
+          total: item.total,
+          itemName: item.itemName,
+        })),
+      })
+    );
+    await Promise.all(promises);
+
+    return { success: "Invoice successfully created" };
+  } catch (error) {
+    console.log(error)
+    return { error: "An error occurred while creating your invoice invoice" };
+  }
 };
 
 export const addInvoiceDraft = async (
@@ -118,6 +133,7 @@ export const addInvoiceDraft = async (
   } = values;
 
   const InvoiceId = uuid().substring(0, 5);
+  const promises = [];
 
   await db.invoice.create({
     data: {
@@ -132,33 +148,45 @@ export const addInvoiceDraft = async (
     },
   });
 
-  await db.senderAddress.create({
-    data: {
-      street: streetAddress,
-      city: city,
-      country: country,
-      postCode: postCode,
-      invoiceId: InvoiceId,
-    },
+  const existingInvoice = await db.invoice.findUnique({
+    where: { id: InvoiceId },
   });
 
-  await db.clientAddress.create({
-    data: {
-      street: ClientStreetAddress,
-      city: ClientCity,
-      country: ClientCountry,
-      postCode: ClientPostCode,
-      invoiceId: InvoiceId,
-    },
-  });
+  promises.push(
+    db.senderAddress.create({
+      data: {
+        street: streetAddress,
+        city: city,
+        country: country,
+        postCode: postCode,
+        invoiceId: existingInvoice?.id,
+      },
+    })
+  );
 
-  await db.item.createMany({
-    data: items.map((item) => ({
-      invoiceId: InvoiceId,
-      price: parseFloat(item.price),
-      quantity: parseInt(item.quantity),
-      total: item.total,
-      itemName: item.ItemName,
-    })),
-  });
+  promises.push(
+    db.clientAddress.create({
+      data: {
+        street: ClientStreetAddress,
+        city: ClientCity,
+        country: ClientCountry,
+        postCode: ClientPostCode,
+        invoiceId: existingInvoice?.id,
+      },
+    })
+  );
+
+  promises.push(
+    db.item.createMany({
+      data: items.map((item) => ({
+        invoiceId: InvoiceId,
+        price: item.price,
+        quantity: item.quantity,
+        total: item.total,
+        itemName: item.itemName,
+      })),
+    })
+  );
+
+  await Promise.all(promises);
 };
