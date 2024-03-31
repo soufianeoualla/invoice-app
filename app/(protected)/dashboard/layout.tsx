@@ -1,17 +1,23 @@
+
 import { Sidebar } from "@/components/Sidebar";
+import { PopUpMessage } from "@/components/dashboard/modals/PopUpMessage";
 
 const DashboardLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
+
+
   return (
-    <div className="bg-light flex dashboard ">
-      <Sidebar />
-      
+    <>
+      <div className="bg-light flex dashboard ">
+        <Sidebar />
+
         <div className="h-screen overflow-y-scroll">{children}</div>
+      </div>
      
-    </div>
+    </>
   );
 };
 

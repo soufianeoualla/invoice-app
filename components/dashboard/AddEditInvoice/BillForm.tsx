@@ -24,6 +24,7 @@ import { InvoiceProps, Item } from "@/lib/interfaces";
 import { PopUpMessage } from "../modals/PopUpMessage";
 import { editInvoice } from "@/actions/editInvoice";
 import { TriggerContext } from "@/context/TriggerContext";
+import { NotificationContext } from "@/context/NotificationContext";
 
 interface errorProp {
   itemName: string;
@@ -37,9 +38,7 @@ interface EditProp {
 export const BillForm = ({ edit, invoice }: EditProp) => {
   const { triggerToggle } = useContext(TriggerContext);
   const { toggle } = useContext(AddEditModalContext);
-  const [error, setError] = useState<string | undefined>();
-  const [success, setSuccess] = useState<string | undefined>();
-  const [notification, setNotification] = useState<boolean>(false);
+  const {setError,setSuccess,notificationToggle} = useContext(NotificationContext)
   const form = useForm<z.infer<typeof BillFormSchema>>({
     resolver: zodResolver(BillFormSchema),
     defaultValues: {
@@ -136,13 +135,9 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
             setSuccess(data.success);
           });
       triggerToggle();
-      setNotification(true);
-      setTimeout(() => {
-        toggle();
-        setTimeout(() => {
-          setNotification(false);
-        }, 3000);
-      }, 3000);
+      notificationToggle()
+      toggle();
+      
     });
   };
   const onSaveDraft = () => {
@@ -150,6 +145,7 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
     startTransition(() => {
       addInvoiceDraft(values, total, date as Date, paymentDue as string, items);
       toggle();
+      triggerToggle()
     });
   };
 
@@ -368,7 +364,6 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
           </form>
         </Form>
       </div>
-      {notification && <PopUpMessage success={success} error={error} />}
     </>
   );
 };

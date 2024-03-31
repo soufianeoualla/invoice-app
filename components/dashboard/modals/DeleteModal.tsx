@@ -2,8 +2,9 @@
 import { deleteInvoice } from "@/actions/InvoiceActions";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
-import { PopUpMessage } from "./PopUpMessage";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { TriggerContext } from "@/context/TriggerContext";
+import { NotificationContext } from "@/context/NotificationContext";
 
 interface DeleteModalProp {
   id: string;
@@ -11,22 +12,19 @@ interface DeleteModalProp {
 }
 
 export const DeleteModal = ({ id, setDeleteModal }: DeleteModalProp) => {
+  const { triggerToggle } = useContext(TriggerContext);
+  const { notificationToggle, setError, setSuccess } =
+    useContext(NotificationContext);
   const router = useRouter();
-  const [error, setError] = useState<string | undefined>();
-  const [success, setSuccess] = useState<string | undefined>();
-  const [notification, setNotification] = useState<boolean>(false);
+
   const onDelete = () => {
     deleteInvoice(id).then((data) => {
       setError(data.error);
       setSuccess(data.success);
     });
-    setNotification(true)
-    setTimeout(() => {
-      router.push("/dashboard");
-      setTimeout(() => {
-        setNotification(false);
-      }, 3000);
-    }, 3000);
+    triggerToggle();
+    router.push("/dashboard");
+    notificationToggle();
   };
   return (
     <>
@@ -60,7 +58,6 @@ export const DeleteModal = ({ id, setDeleteModal }: DeleteModalProp) => {
           </Button>
         </div>
       </div>
-      {notification && <PopUpMessage error={error} success={success} />}
     </>
   );
 };

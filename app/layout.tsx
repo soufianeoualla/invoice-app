@@ -3,6 +3,8 @@ import { League_Spartan } from "next/font/google";
 import "./globals.css";
 import { AddEditModalProvider } from "@/context/AddEditModalContext";
 import { TriggerProvider } from "@/context/TriggerContext";
+import { ThemeContext } from "@/context/ThemeContext";
+import { NotificationProvider } from "@/context/NotificationContext";
 
 const font = League_Spartan({ subsets: ["latin"] });
 
@@ -19,9 +21,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <AddEditModalProvider>
-          <TriggerProvider>{children}</TriggerProvider>
-        </AddEditModalProvider>
+        <ThemeContext>
+          <NotificationProvider>
+            <AddEditModalProvider>
+              <TriggerProvider>{children}</TriggerProvider>
+            </AddEditModalProvider>
+          </NotificationProvider>
+        </ThemeContext>
       </body>
     </html>
   );

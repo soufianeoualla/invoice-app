@@ -1,5 +1,5 @@
 "use client";
-import {  markAsPaid } from "@/actions/InvoiceActions";
+import { markAsPaid } from "@/actions/InvoiceActions";
 import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { getSingleInvoice } from "@/data/singleInvoice";
@@ -10,48 +10,15 @@ import { FaChevronLeft } from "react-icons/fa";
 import { DeleteModal } from "./DeleteModal";
 import { AddEditModalContext } from "@/context/AddEditModalContext";
 import { AddEditInvoice } from "./AddEditInvoice";
-
-interface AddressProps {
-  id: number;
-  street: string;
-  city: string;
-  postCode: string;
-  country: string;
-  invoiceId: string;
-}
-
-interface ItemProps {
-  id: number;
-  itemName: string;
-  quantity: number;
-  price: number;
-  total: number;
-  invoiceId: string;
-}
-
-interface InvoiceProps {
-  id: string;
-  description: string | null;
-  clientName: string;
-  clientEmail: string;
-  total: number;
-  status: string;
-  createdAt: Date | string;
-  invoiceDate: Date | string;
-  paymentDue: string;
-  updatedAt: Date | string;
-  userId: string;
-  clientAddress: AddressProps[];
-  item: ItemProps[];
-  senderAddress: AddressProps[];
-  error: string;
-}
+import { InvoiceProps } from "@/lib/interfaces";
+import { TriggerContext } from "@/context/TriggerContext";
 
 export const ViewInvoice = () => {
-  const{addEditModal,toggle} =useContext(AddEditModalContext)
+  const { addEditModal, toggle } = useContext(AddEditModalContext);
+  const { triggerToggle, trigger } = useContext(TriggerContext);
   const [invoice, setInvoice] = useState<InvoiceProps>();
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
-  console.log(invoice)
+  console.log(invoice);
   const searchParams = useSearchParams();
   const router = useRouter();
   const id = searchParams.get("id");
@@ -61,11 +28,11 @@ export const ViewInvoice = () => {
     const response = await getSingleInvoice(id);
     if (!response) return;
     setInvoice(response as InvoiceProps);
-  },[id]);
+  }, [id]);
 
   useEffect(() => {
     getData();
-  }, [getData]);
+  }, [getData, trigger]);
 
   if (!invoice)
     return (
@@ -81,11 +48,11 @@ export const ViewInvoice = () => {
     paymentDueDate.getDate() + parseInt(invoice.paymentDue)
   );
   const statusColors =
-  invoice.status === "pending"
-    ? "bg-pending text-pending"
-    : invoice.status === "paid"
-    ? "bg-emerald-500 text-emerald-500"
-    : "bg-draft text-draft";
+    invoice.status === "pending"
+      ? "bg-pending text-pending"
+      : invoice.status === "paid"
+      ? "bg-emerald-500 text-emerald-500"
+      : "bg-draft text-draft";
 
   return (
     <>
@@ -116,7 +83,9 @@ export const ViewInvoice = () => {
 
           <div className="space-x-2">
             <Button
-            onClick={()=>{toggle()}}
+              onClick={() => {
+                toggle();
+              }}
               variant={"ghost"}
               className="text-Subtle-Turquoise font-bold hover:text-primary text-[15px] hover:bg-transparent focus:text-primary "
             >
@@ -131,7 +100,10 @@ export const ViewInvoice = () => {
             </Button>
             {invoice.status === "pending" && (
               <Button
-                onClick={() => markAsPaid(invoice.id)}
+                onClick={() => {
+                  markAsPaid(invoice.id);
+                  triggerToggle();
+                }}
                 className="rounded-3xl w-[131px] pt-3 h-12 text-[15px] font-bold tracking-wide"
               >
                 Mark as Paid{" "}

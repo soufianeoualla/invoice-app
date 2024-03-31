@@ -10,11 +10,13 @@ import { InvoiceProps } from "@/lib/interfaces";
 import Image from "next/image";
 import ullistration from "@/components/assets/illustration-empty.svg";
 import { TriggerContext } from "@/context/TriggerContext";
+import { PopUpMessage } from "./modals/PopUpMessage";
+import { NotificationContext } from "@/context/NotificationContext";
 
 export const DashboardWrapper = () => {
   const { addEditModal } = useContext(AddEditModalContext);
   const {trigger} = useContext(TriggerContext)
-
+  const {notification} = useContext(NotificationContext)
   const [invoices, setInvoices] = useState<InvoiceProps[]>([]);
   useEffect(() => {
     const getData = async () => {
@@ -65,6 +67,7 @@ export const DashboardWrapper = () => {
       </div>
 
       {addEditModal && <AddEditInvoice   edit={false} />}
+      {notification && <PopUpMessage/>}
     </>
   );
 };
