@@ -15,9 +15,9 @@ export const Invoices = ({ invoices }: Invoices) => {
     );
 
   return (
-    <div className="w-full">
+    <div className="w-full ">
       {invoices.map((item) => (
-        <SingleInvoice key={item.id} invoice={item} />
+        <SingleInvoice key={item.id}  invoice={item} />
       ))}
     </div>
   );

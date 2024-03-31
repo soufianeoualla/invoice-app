@@ -11,7 +11,7 @@ const DashboardLayout = ({
 
   return (
     <>
-      <div className="bg-light flex dashboard ">
+      <div className="bg-light flex dashboard dark:bg-dark ">
         <Sidebar />
 
         <div className="h-screen overflow-y-scroll">{children}</div>

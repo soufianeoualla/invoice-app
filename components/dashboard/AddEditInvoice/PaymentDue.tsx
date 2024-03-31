@@ -19,10 +19,10 @@ export const PaymentDue = ({setPaymentDue}:PaymentDueProp) => {
   };
   return (
     <div className="space-y-2 w-[48%]">
-      <span className="text-[13px] text-Subtle-Turquoise font-medium ">
+      <span className="text-[13px] text-Subtle-Turquoise font-medium dark:text-Bright-Turquoise">
         Payment Due
       </span>
-      <Select defaultValue="7">
+      <Select defaultValue="7" >
         <SelectTrigger className="w-full h-11">
           <SelectValue placeholder="Net 7 Days" />
         </SelectTrigger>

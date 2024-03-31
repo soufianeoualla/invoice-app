@@ -33,12 +33,13 @@ interface errorProp {
 }
 interface EditProp {
   edit: boolean | undefined;
-  invoice: InvoiceProps ;
+  invoice: InvoiceProps;
 }
 export const BillForm = ({ edit, invoice }: EditProp) => {
   const { triggerToggle } = useContext(TriggerContext);
   const { toggle } = useContext(AddEditModalContext);
-  const {setError,setSuccess,notificationToggle} = useContext(NotificationContext)
+  const { setError, setSuccess, notificationToggle } =
+    useContext(NotificationContext);
   const form = useForm<z.infer<typeof BillFormSchema>>({
     resolver: zodResolver(BillFormSchema),
     defaultValues: {
@@ -135,9 +136,8 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
             setSuccess(data.success);
           });
       triggerToggle();
-      notificationToggle()
+      notificationToggle();
       toggle();
-      
     });
   };
   const onSaveDraft = () => {
@@ -145,7 +145,7 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
     startTransition(() => {
       addInvoiceDraft(values, total, date as Date, paymentDue as string, items);
       toggle();
-      triggerToggle()
+      triggerToggle();
     });
   };
 
@@ -297,7 +297,7 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
 
             <div className=" flex items-center justify-between w-full ">
               <div className="space-y-2 w-[48%]">
-                <span className="text-[13px] text-Subtle-Turquoise font-medium ">
+                <span className="text-[13px] text-Subtle-Turquoise font-medium dark:text-Bright-Turquoise ">
                   Invoice Date
                 </span>
                 <DatePicker setDate={setDate} date={date} />
@@ -332,29 +332,37 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
                 <em> {itemError?.price}</em>
               </div>
 
-              <div className="flex justify-between items-center ">
+              <div
+                className={` flex ${
+                  edit ? "justify-end gap-2" : "justify-between"
+                } items-center `}
+              >
                 <Button
                   variant={"ghost"}
                   type="button"
                   onClick={toggle}
                   disabled={isPending}
-                  className="text-light-purple pt-3 hover:bg-transparent hover:text-dark text-sm font-bold"
+                  className={` pt-2.5 h-12  hover:bg-transparent  text-sm rounded-3xl font-bold  ${
+                    edit ? "dark:bg-Dusty-Aqua/80 text-Soft-Teal dark:hover:text-white":"dark:bg-light text-light-purple hover:text-dark"
+                  }`}
                 >
                   Discard
                 </Button>
                 <div className="space-x-2">
-                  <Button
-                    onClick={onSaveDraft}
-                    type="button"
-                    disabled={isPending}
-                    className="bg-Dusty-Aqua text-Soft-Teal h-12 pt-3 w-[133px] font-bold text-[15px] rounded-3xl hover:bg-dark"
-                  >
-                    Save as Draft
-                  </Button>
+                  {!edit && (
+                    <Button
+                      onClick={onSaveDraft}
+                      type="button"
+                      disabled={isPending}
+                      className="bg-Dusty-Aqua text-Soft-Teal h-12 pt-2.5 w-[133px] font-bold text-[15px] rounded-3xl hover:bg-dark dark:bg-Dusty-Aqua/80"
+                    >
+                      Save as Draft
+                    </Button>
+                  )}
                   <Button
                     type="submit"
                     disabled={isPending}
-                    className="font-bold text-[15px]  h-12 pt-3 w-[133px] rounded-3xl"
+                    className="font-bold text-[15px]  h-12 pt-2.5 w-[133px] rounded-3xl"
                   >
                     Save & Send
                   </Button>

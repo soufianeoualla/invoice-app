@@ -35,7 +35,7 @@ export const DatePicker = ({date,setDate}:DatePickerProp) => {
         <Button
           variant={"outline"}
           className={cn(
-            "w-full h-11 justify-start text-left font-normal",
+            "w-full h-11 justify-start text-left font-normal  dark:border-Dusty-Aqua dark:bg-Slate-Teal",
             !date && "text-muted-foreground"
           )}
         >
@@ -45,7 +45,7 @@ export const DatePicker = ({date,setDate}:DatePickerProp) => {
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="flex w-auto flex-col space-y-2 p-2"
+        className="flex w-auto flex-col space-y-2 p-2 "
       >
         <Select
           defaultValue="0"
@@ -66,7 +66,7 @@ export const DatePicker = ({date,setDate}:DatePickerProp) => {
           </SelectContent>
         </Select>
         <div className="rounded-md border">
-          <Calendar mode="single" selected={date} onSelect={setDate} />
+          <Calendar mode="single" selected={date} onSelect={setDate}  />
         </div>
       </PopoverContent>
     </Popover>

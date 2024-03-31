@@ -62,15 +62,15 @@ export const ViewInvoice = () => {
             router.back();
           }}
           variant={"ghost"}
-          className="flex items-center gap-6 font-bold hover:bg-transparent focus:text-primary"
+          className="flex items-center gap-6 font-bold hover:bg-transparent focus:text-primary hover:text-light-purple"
         >
-          <FaChevronLeft className="text-primary w-4 h-4 " />
+          <FaChevronLeft className="text-primary w-4 h-4  " />
           Go back
         </Button>
 
-        <div className="w-full h-[88px] rounded-lg flex items-center justify-between px-8 py-6 bg-white mt-8">
+        <div className="w-full h-[88px] rounded-lg flex items-center justify-between px-8 py-6 bg-white mt-8 dark:bg-Slate-Teal">
           <div className="flex items-center gap-5">
-            <small className="text-[13px] font-medium text-Soft-Teal">
+            <small className="text-[13px] font-medium text-Soft-Teal dark:text-Bright-Turquoise">
               Status
             </small>
             <div
@@ -87,14 +87,14 @@ export const ViewInvoice = () => {
                 toggle();
               }}
               variant={"ghost"}
-              className="text-Subtle-Turquoise font-bold hover:text-primary text-[15px] hover:bg-transparent focus:text-primary "
+              className="text-Subtle-Turquoise pt-2.5 font-bold rounded-3xl h-12 w-16 hover:text-primary text-[15px] hover:bg-transparent focus:text-primary dark:bg-Dusty-Aqua dark:hover:bg-Bright-Turquoise "
             >
               Edit
             </Button>
 
             <Button
               onClick={() => setDeleteModal(true)}
-              className="bg-destructive/90 pt-3 hover:bg-destructive/75 text-white rounded-3xl w-[89px] h-12 text-[15px] font-bold tracking-wide"
+              className="bg-destructive/95 pt-2.5 hover:bg-destructive/75 text-white rounded-3xl w-[89px] h-12 text-[15px] font-bold tracking-wide dark:hover:bg-destructive-foreground"
             >
               Delete
             </Button>
@@ -104,7 +104,7 @@ export const ViewInvoice = () => {
                   markAsPaid(invoice.id);
                   triggerToggle();
                 }}
-                className="rounded-3xl w-[131px] pt-3 h-12 text-[15px] font-bold tracking-wide"
+                className="rounded-3xl w-[131px] pt-2.5 h-12 text-[15px] font-bold tracking-wide hover:bg-light-purple"
               >
                 Mark as Paid{" "}
               </Button>
@@ -112,18 +112,18 @@ export const ViewInvoice = () => {
           </div>
         </div>
 
-        <div className="mt-6 bg-white rounded-lg p-12">
+        <div className="my-6 bg-white rounded-lg p-12 dark:bg-Slate-Teal ">
           <div className="flex items-center justify-between">
             <div className="grid gap-y-2">
-              <strong className="text-dark uppercase">
+              <strong className="text-dark uppercase dark:text-white text-[15px]">
                 <span className="text-Subtle-Turquoise ">#</span>
                 {invoice.id}
               </strong>
-              <span className="text-Subtle-Turquoise text-[13px] font-medium">
+              <span className="text-Subtle-Turquoise text-[13px] font-medium dark:text-Bright-Turquoise">
                 {invoice?.description}
               </span>
             </div>
-            <div className="text-Subtle-Turquoise text-[13px] font-medium text-right">
+            <div className="text-Subtle-Turquoise text-[13px] font-medium text-right dark:text-Bright-Turquoise">
               <div>
                 {invoice?.senderAddress[0]?.street} <br />
                 {invoice?.senderAddress[0]?.city} <br />
@@ -136,26 +136,30 @@ export const ViewInvoice = () => {
           <div className="text-dark flex gap-[12%] items-start mt-5">
             <div className="space-y-8">
               <div className="grid gap-2">
-                <span className="text-Subtle-Turquoise text-[13px] font-medium">
+                <span className="text-Subtle-Turquoise text-[13px] font-medium dark:text-Bright-Turquoise">
                   Invoice Date
                 </span>
-                <strong>{formatDate(invoice.invoiceDate.toString())}</strong>
+                <strong className="text-dark dark:text-white text-[15px]">
+                  {formatDate(invoice.invoiceDate.toString())}
+                </strong>
               </div>
 
               <div className="grid gap-2">
-                <span className="text-Subtle-Turquoise text-[13px] font-medium">
+                <span className="text-Subtle-Turquoise text-[13px] font-medium dark:text-Bright-Turquoise">
                   Payment Due
                 </span>
-                <strong>{formatDate(paymentDueDate.toString())}</strong>
+                <strong className="text-dark dark:text-white text-[15px]">
+                  {formatDate(paymentDueDate.toString())}
+                </strong>
               </div>
             </div>
 
-            <div className="grid gap-2">
-              <span className="text-Subtle-Turquoise font-medium text-[13px]">
-                Bill to
-              </span>
-              <strong className="capitalize">{invoice.clientName}</strong>
-              <p className="text-Subtle-Turquoise font-medium text-[13px]">
+            <div className="grid gap-2 text-[13px] text-Subtle-Turquoise dark:text-Bright-Turquoise">
+              <span className=" font-medium  ">Bill to</span>
+              <strong className="capitalize dark:text-white text-dark text-[15px]">
+                {invoice.clientName}
+              </strong>
+              <p className=" font-medium ] ">
                 {invoice.clientAddress[0]?.street} <br />{" "}
                 {invoice.clientAddress[0]?.city} <br />
                 {invoice.clientAddress[0]?.postCode} <br />{" "}
@@ -164,26 +168,30 @@ export const ViewInvoice = () => {
             </div>
 
             <div className="grid gap-2">
-              <span className="text-[13px] text-Subtle-Turquoise font-medium">
+              <span className="text-[13px] text-Subtle-Turquoise font-medium dark:text-Bright-Turquoise">
                 Sent to
               </span>
-              <strong>{invoice.clientEmail}</strong>
+              <strong className="text-dark dark:text-white text-[15px] -tracking-tighter">
+                {invoice.clientEmail}
+              </strong>
             </div>
           </div>
 
-          <div className="px-8 py-10">
+          <div className="p-8 dark:bg-Dusty-Aqua rounded-lg mt-11">
             <table className="w-full">
-              <tr>
+              <tr className="dark:text-Bright-Turquoise text-Subtle-Turquoise">
                 <th>item Name</th>
                 <th>QTY.</th>
                 <th>Price</th>
                 <th>Total</th>
               </tr>
               {invoice.item.map((item) => (
-                <tr key={item.id}>
+                <tr key={item.id} className=" text-dark dark:text-white">
                   <td>{item.itemName}</td>
-                  <td className="text-Subtle-Turquoise">{item.quantity}</td>
-                  <td className="text-Subtle-Turquoise">
+                  <td className="text-Subtle-Turquoise dark:text-Bright-Turquoise">
+                    {item.quantity}
+                  </td>
+                  <td className="text-Subtle-Turquoise dark:text-Bright-Turquoise">
                     {formatPrice(item.price)}
                   </td>
                   <td>{formatPrice(item.total)}</td>
@@ -191,7 +199,7 @@ export const ViewInvoice = () => {
               ))}
             </table>
           </div>
-          <div className="bg-Dusty-Aqua w-full h-20 px-8 flex justify-between items-center text-white text-[13px] rounded-b-md ">
+          <div className="bg-Dusty-Aqua w-full h-20 px-8 flex justify-between items-center text-white text-[13px] rounded-b-md dark:bg-dark ">
             <span>Amount Due</span>
             <strong className="text-2xl ">{formatPrice(invoice.total)}</strong>
           </div>

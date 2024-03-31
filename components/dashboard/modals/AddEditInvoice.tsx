@@ -19,10 +19,10 @@ export const AddEditInvoice = ({ edit, invoice }: EditProp) => {
         onClick={toggle}
         className="w-full top-0 left-0 h-full fixed bg-dark/40 z-10"
       ></div>
-      <div className="bg-white w-[610px] h-screen absolute top-0 left-[90px] rounded-r-2xl p-14 shadow-md z-20 overflow-y-scroll  ">
-        <h1 className="text-2xl font-bold mb-20">
-          {edit ? "Edit Invoice" : "New Invoice"}
-        </h1>
+      <div className="bg-white w-[610px] h-screen absolute top-0 left-[90px] rounded-r-2xl p-14 shadow-md z-20 overflow-y-scroll dark:bg-dark ">
+        <div className="text-2xl font-bold mb-20 text-dark dark:text-white">
+          {edit ? <h1 className="">Edit Invoice <span className="text-Soft-Teal text-2xl">#</span><span className="uppercase text-2xl">{invoice?.id}</span></h1> : "New Invoice"}
+        </div>
         <BillForm edit={edit} invoice={invoice as InvoiceProps}  />
       </div>
       

@@ -39,8 +39,8 @@ export const TopSection = ({
   return (
     <section className="flex items-center justify-between w-full text-[15px]">
       <div>
-        <h1 className="font-bold text-4xl text-dark">Invoices</h1>
-        <p className="text-Soft-Teal">
+        <h1 className="font-bold text-4xl text-dark dark:text-white">Invoices</h1>
+        <p className="text-Soft-Teal dark:text-Bright-Turquoise">
           {invoices.length > 0
             ? `There are ${pendingInvoices.length} pending invoices`
             : "No invoices"}
@@ -52,16 +52,16 @@ export const TopSection = ({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size={"default"}>
-                <div className="flex justify-between items-center text-dark">
+                <div className="flex justify-between items-center text-dark dark:text-white">
                   <b>Filter by status</b>
                   <IoChevronDown className="ml-4 text-primary" />
                 </div>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-48 p-3 space-y-1 ">
+            <DropdownMenuContent className="w-48 p-3 space-y-1  dark:border-Dusty-Aqua dark:bg-Slate-Teal ">
               {filters.map((item, index) => (
                 <DropdownMenuCheckboxItem
-                className="capitalize text-dark"
+                className="capitalize text-dark dark:text-white"
                   onClick={() => handleChecked(item)}
                   key={index}
                   checked={checked.includes(item)}

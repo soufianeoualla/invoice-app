@@ -32,20 +32,20 @@ export const DeleteModal = ({ id, setDeleteModal }: DeleteModalProp) => {
         onClick={() => setDeleteModal(false)}
         className="fixed inset-0 w-full h-full bg-dark/15"
       ></div>
-      <div className="w-[480px] absolute top-[20%] left-1/2 -translate-x-1/2 translate-y-1/2  rounded-lg p-12 z-20 bg-white">
-        <h1 className="text-xl font-bold -tracking-tighter mb-3 text-dark">
+      <div className="w-[480px] absolute top-[20%] left-1/2 -translate-x-1/2 translate-y-1/2  rounded-lg p-12 z-20 bg-white dark:bg-dark">
+        <h1 className="text-xl font-bold -tracking-tighter mb-3 text-dark dark:text-white">
           Confirm Deletion
         </h1>
-        <p className="text-Soft-Teal text-[13px]">
+        <p className="text-Soft-Teal text-[13px] dark:text-Bright-Turquoise">
           Are you sure you want to delete invoice{" "}
           <span className="uppercase">#{id}</span>? This action cannot be
           undone.
         </p>
-        <div className="flex justify-end items-center mt-4">
+        <div className="flex justify-end items-center mt-4 gap-x-2">
           <Button
             onClick={() => setDeleteModal(false)}
             variant={"ghost"}
-            className="text-base pt-3 h-12 w-[89px] text-Subtle-Turquoise hover:bg-transparent font-bold "
+            className="text-base pt-3 h-12 w-[89px] text-Subtle-Turquoise hover:bg-transparent font-bold rounded-3xl  dark:bg-Dusty-Aqua dark:text-white"
           >
             Cancel
           </Button>
