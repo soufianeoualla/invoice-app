@@ -15,12 +15,12 @@ export const HeroSection = () => {
         </p>
         <div className="flex items-center gap-x-4">
         <Button
-          className="hover:text-primary h-11 border-primary bg-primary text-white"
+          className="hover:text-primary h-11 border-primary  text-white"
           asChild
           size={"default"}
           variant={"outline"}
         >
-          <Link className="w-28 hover:text-white " href={"/dashboard"}>
+          <Link className="w-28 " href={"/dashboard"}>
             Get Started
           </Link>
         </Button>
