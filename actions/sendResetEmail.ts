@@ -16,7 +16,7 @@ export const sendResetEmail =async (values:z.infer<typeof ForgotPsswordSchema>)=
     const existingUser = await getUserByEmail(email)
     if(!existingUser) return {error:'Email does not exist'}
     const verficationToken = await generateResetPasswordTokens(email);
-    await sendPasswordResetEmail(verficationToken.email, verficationToken.token);
+    await sendPasswordResetEmail(verficationToken.email, verficationToken.token,existingUser.name as string);
     return {success: "Reset email sent!"};
 
 }

@@ -88,7 +88,7 @@ export const Sidebar = () => {
               <DropdownMenuGroup className="text-dark dark:text-white">
                 <DropdownMenuItem>Profile</DropdownMenuItem>
 
-                <DropdownMenuItem onClick={()=>signOut()}>
+                <DropdownMenuItem onClick={()=>signOut()} className="cursor-pointer">
                   Log out
                   <DropdownMenuShortcut>
                     <IoMdLogOut className="text-xl" />

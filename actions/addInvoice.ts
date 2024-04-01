@@ -5,7 +5,7 @@ import { BillFormSchema } from "@/schemas";
 import { z } from "zod";
 import { v4 as uuid } from "uuid";
 
-interface ItemProps {
+export interface ItemProps {
   itemName: string;
   quantity: number;
   price: number;
@@ -100,9 +100,10 @@ export const addInvoice = async (
     );
     await Promise.all(promises);
 
+
     return { success: "Invoice successfully created" };
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return { error: "An error occurred while creating your invoice invoice" };
   }
 };

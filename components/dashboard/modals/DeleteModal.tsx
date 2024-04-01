@@ -30,7 +30,7 @@ export const DeleteModal = ({ id, setDeleteModal }: DeleteModalProp) => {
     <>
       <div
         onClick={() => setDeleteModal(false)}
-        className="fixed inset-0 w-full h-full bg-dark/15 z-40 sm:bg-dark/75"
+        className="fixed inset-0 w-full h-full bg-dark/15 z-40 dark:bg-dark/80"
       ></div>
       <div className="w-[480px] absolute top-[20%] left-1/2 -translate-x-1/2 translate-y-1/2  rounded-lg p-12 z-50 bg-white dark:bg-dark sm:w-[90%]">
         <h1 className="text-xl font-bold -tracking-tighter mb-3 text-dark dark:text-white">
