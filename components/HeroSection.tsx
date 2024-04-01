@@ -20,12 +20,12 @@ export const HeroSection = () => {
           size={"default"}
           variant={"outline"}
         >
-          <Link className="w-28 " href={"/dashboard"}>
+          <Link className="w-28 hover:text-white " href={"/dashboard"}>
             Get Started
           </Link>
         </Button>
 
-        <p className="tracking-widest text-dark/70">Try Demo</p>
+       
 
         </div>
       </div>
