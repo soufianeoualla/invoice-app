@@ -4,11 +4,9 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
 import { SocialProviders } from "./SocialProviders";
-import ResetPassword from "./ResetPassword";
 import { RegisterForm } from "./RegisterForm";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
@@ -51,7 +49,7 @@ const CardWrapper = ({
         ) : type === "register" ? (
           <RegisterForm />
         ) : (
-          type === "reset" && <ResetPassword />
+         ''
         )}
 
         {showSocial && <SocialProviders />}
