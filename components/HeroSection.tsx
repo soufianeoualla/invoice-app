@@ -15,10 +15,10 @@ export const HeroSection = () => {
         </p>
         <div className="flex items-center gap-x-4">
         <Button
-          className="hover:text-primary h-11 border-primary  text-white"
+          className="hover:text-primary h-11 border-primary  text-white bg-primary"
           asChild
           size={"default"}
-          variant={"outline"}
+          
         >
           <Link className="w-28 " href={"/dashboard"}>
             Get Started
