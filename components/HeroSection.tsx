@@ -14,19 +14,16 @@ export const HeroSection = () => {
           schedule
         </p>
         <div className="flex items-center gap-x-4">
-        <Button
-          className="hover:text-primary h-11 border-primary bg-primary text-white"
-          asChild
-          size={"default"}
-          variant={"outline"}
-        >
-          <Link className="w-28 " href={"/dashboard"}>
-            Get Started
-          </Link>
-        </Button>
-
-        <p className="tracking-widest text-dark/70">Try Demo</p>
-
+          <Button
+            className=" h-11 border-primary bg-primary text-white hover:bg-light-purple"
+            asChild
+            size={"default"}
+            variant={"outline"}
+          >
+            <Link className="w-28 " href={"/dashboard"}>
+              Get Started
+            </Link>
+          </Button>
         </div>
       </div>
 
