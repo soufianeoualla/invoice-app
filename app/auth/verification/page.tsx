@@ -1,9 +1,12 @@
 import { VerifiactionForm } from '@/components/auth/VerifiactionForm'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const VerificationPage = () => {
   return (
+    <Suspense>
+
    <VerifiactionForm/>
+    </Suspense>
   )
 }
 
