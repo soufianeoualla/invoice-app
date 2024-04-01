@@ -4,7 +4,7 @@ import Image from "next/image";
 import hero_image from "@/components/assets/hero-section.svg";
 export const HeroSection = () => {
   return (
-    <div className="flex h-full   items-center mt-[77px]  max-w-screen-xl mx-auto justify-around">
+    <div className="flex h-[70vh]   items-center   max-w-screen-xl mx-auto justify-around">
       <div className="space-y-4 w-[25%]">
         <h1 className="text-4xl font-bold capitalize text-dark ">
           Say Goodbye to invoice Stress
@@ -15,7 +15,7 @@ export const HeroSection = () => {
         </p>
         <div className="flex items-center gap-x-4">
         <Button
-          className="hover:text-primary h-11 border-primary bg-primary text-white"
+          className=" h-11 border-primary bg-primary text-white  hover:bg-light-purple"
           asChild
           size={"default"}
           variant={"outline"}
@@ -25,7 +25,6 @@ export const HeroSection = () => {
           </Link>
         </Button>
 
-        <p className="tracking-widest text-dark/70">Try Demo</p>
 
         </div>
       </div>
