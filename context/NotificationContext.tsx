@@ -34,7 +34,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     setNotification(true);
     setTimeout(() => {
       setNotification(false);
-    }, 5000);
+    }, 6000);
   };
 
   return (

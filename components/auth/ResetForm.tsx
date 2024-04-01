@@ -12,31 +12,29 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { LoginSchema } from "@/schemas";
+import { ForgotPsswordSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { FormError } from "./FormError";
 import { FormSuccess } from "./FormSuccess";
-import Link from "next/link";
-import { login } from "@/actions/login";
+import { sendResetEmail } from "@/actions/sendResetEmail";
 
-export const LoginForm = () => {
+export const ResetForm = () => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof ForgotPsswordSchema>>({
+    resolver: zodResolver(ForgotPsswordSchema),
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
-  const onLogin = (values: z.infer<typeof LoginSchema>) => {
+  const onSend = (values: z.infer<typeof ForgotPsswordSchema>) => {
     setError("");
     setSuccess("");
     startTransition(() => {
-      login(values).then((data) => {
+        sendResetEmail(values).then((data) => {
         setError(data?.error);
         setSuccess(data?.success);
       });
@@ -44,10 +42,11 @@ export const LoginForm = () => {
   };
 
   return (
+    <>
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onLogin)}
-        className="space-y-6 text-left"
+        onSubmit={form.handleSubmit(onSend)}
+        className="space-y-8 text-left"
       >
         <FormField
           control={form.control}
@@ -67,32 +66,6 @@ export const LoginForm = () => {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input
-                  disabled={isPending}
-                  type="password"
-                  placeholder="******"
-                  {...field}
-                />
-              </FormControl>
-              <Button
-                size={"sm"}
-                asChild
-                variant={"link"}
-                className="px-0 font-normal"
-              >
-                <Link href={"/auth/reset"}>Forgot password?</Link>
-              </Button>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         {error && <FormError message={error} />}{" "}
         {success && <FormSuccess message={success} />}{" "}
         <Button
@@ -101,9 +74,12 @@ export const LoginForm = () => {
           type="submit"
           className="w-full"
         >
-          login
+          Send email
         </Button>
       </form>
     </Form>
+
+   
+    </>
   );
 };

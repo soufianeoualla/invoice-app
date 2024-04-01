@@ -66,7 +66,8 @@ const config: Config = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       screens:{
-        'sm': {'max': '639px'},
+        'md': {'max': '939px'},
+        'sm': {'max': '620px'},
       }
     },
   },

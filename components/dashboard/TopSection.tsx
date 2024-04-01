@@ -39,10 +39,17 @@ export const TopSection = ({
   return (
     <section className="flex items-center justify-between w-full text-[15px]">
       <div>
-        <h1 className="font-bold text-4xl text-dark dark:text-white">Invoices</h1>
-        <p className="text-Soft-Teal dark:text-Bright-Turquoise">
+        <h1 className="font-bold text-4xl text-dark dark:text-white sm:text-2xl">
+          Invoices
+        </h1>
+        <p className="text-Soft-Teal dark:text-Bright-Turquoise sm:hidden">
           {invoices.length > 0
             ? `There are ${pendingInvoices.length} pending invoices`
+            : "No invoices"}
+        </p>
+        <p className="text-Soft-Teal dark:text-Bright-Turquoise hidden sm:block">
+          {invoices.length > 0
+            ? ` ${invoices.length} invoices`
             : "No invoices"}
         </p>
       </div>
@@ -53,7 +60,8 @@ export const TopSection = ({
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size={"default"}>
                 <div className="flex justify-between items-center text-dark dark:text-white">
-                  <b>Filter by status</b>
+                  <b className="sm:hidden">Filter by status</b>
+                  <b className="hidden sm:block">Filter </b>
                   <IoChevronDown className="ml-4 text-primary" />
                 </div>
               </Button>
@@ -61,7 +69,7 @@ export const TopSection = ({
             <DropdownMenuContent className="w-48 p-3 space-y-1  dark:border-Dusty-Aqua dark:bg-Slate-Teal ">
               {filters.map((item, index) => (
                 <DropdownMenuCheckboxItem
-                className="capitalize text-dark dark:text-white"
+                  className="capitalize text-dark dark:text-white"
                   onClick={() => handleChecked(item)}
                   key={index}
                   checked={checked.includes(item)}
@@ -74,12 +82,13 @@ export const TopSection = ({
 
           <button
             onClick={() => toggle()}
-            className="w-[150px] h-12 flex gap-4 px-2 justify-start items-center rounded-3xl text-white bg-primary hover:bg-primary-foreground "
+            className="w-[150px] h-12 flex gap-2 px-2 justify-start items-center rounded-3xl text-white bg-primary hover:bg-primary-foreground sm:w-[90px] sm:h-11 "
           >
             <div className="w-8 h-8 rounded-full flex justify-center items-center bg-white">
               <FaPlus className="text-primary" />
             </div>
-            <b className="pt-1">New Invoice</b>
+            <b className="pt-1 sm:hidden">New Invoice</b>
+            <b className="pt-1 hidden sm:block">New</b>
           </button>
         </div>
       </div>

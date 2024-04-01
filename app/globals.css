@@ -21,6 +21,12 @@ th {
   display: grid;
   grid-template-columns: 100px 1fr;
 }
+@media screen and (max-width:939px) {
+  .dashboard {
+   
+    grid-template-columns:  none;
+  }
+}
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,

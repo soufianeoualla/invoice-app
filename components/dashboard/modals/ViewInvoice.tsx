@@ -56,7 +56,7 @@ export const ViewInvoice = () => {
 
   return (
     <>
-      <div className="w-[730px] mt-[50px] mx-auto ">
+      <div className="w-[730px] mt-[50px] mx-auto md:w-full  md:p-8 ">
         <Button
           onClick={() => {
             router.back();
@@ -69,7 +69,7 @@ export const ViewInvoice = () => {
         </Button>
 
         <div className="w-full h-[88px] rounded-lg flex items-center justify-between px-8 py-6 bg-white mt-8 dark:bg-Slate-Teal">
-          <div className="flex items-center gap-5">
+          <div className="flex items-center sm:w-full sm:justify-between gap-5">
             <small className="text-[13px] font-medium text-Soft-Teal dark:text-Bright-Turquoise">
               Status
             </small>
@@ -81,7 +81,7 @@ export const ViewInvoice = () => {
             </div>
           </div>
 
-          <div className="space-x-2">
+          <div className="space-x-2 sm:fixed sm:bottom-0 sm:left-0 md:bg-Slate-Teal sm:flex sm:justify-center sm:w-screen sm:h-20 sm:items-center ">
             <Button
               onClick={() => {
                 toggle();
@@ -113,7 +113,7 @@ export const ViewInvoice = () => {
         </div>
 
         <div className="my-6 bg-white rounded-lg p-12 dark:bg-Slate-Teal ">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between sm:flex-col sm:gap-y-8 sm:justify-start sm:items-start">
             <div className="grid gap-y-2">
               <strong className="text-dark uppercase dark:text-white text-[15px]">
                 <span className="text-Subtle-Turquoise ">#</span>
@@ -133,38 +133,40 @@ export const ViewInvoice = () => {
             </div>
           </div>
 
-          <div className="text-dark flex gap-[12%] items-start mt-5">
-            <div className="space-y-8">
-              <div className="grid gap-2">
-                <span className="text-Subtle-Turquoise text-[13px] font-medium dark:text-Bright-Turquoise">
-                  Invoice Date
-                </span>
-                <strong className="text-dark dark:text-white text-[15px]">
-                  {formatDate(invoice.invoiceDate.toString())}
-                </strong>
+          <div className="text-dark flex gap-20   items-start mt-5 sm:flex-col sm:gap-10">
+            <div className="flex gap-28 md:gap-20 ">
+              <div className="space-y-8">
+                <div className="grid gap-2">
+                  <span className="text-Subtle-Turquoise text-[13px] font-medium dark:text-Bright-Turquoise">
+                    Invoice Date
+                  </span>
+                  <strong className="text-dark dark:text-white text-[15px]">
+                    {formatDate(invoice.invoiceDate.toString())}
+                  </strong>
+                </div>
+
+                <div className="grid gap-2">
+                  <span className="text-Subtle-Turquoise text-[13px] font-medium dark:text-Bright-Turquoise">
+                    Payment Due
+                  </span>
+                  <strong className="text-dark dark:text-white text-[15px]">
+                    {formatDate(paymentDueDate.toString())}
+                  </strong>
+                </div>
               </div>
 
-              <div className="grid gap-2">
-                <span className="text-Subtle-Turquoise text-[13px] font-medium dark:text-Bright-Turquoise">
-                  Payment Due
-                </span>
-                <strong className="text-dark dark:text-white text-[15px]">
-                  {formatDate(paymentDueDate.toString())}
+              <div className="grid gap-2 text-[13px] text-Subtle-Turquoise dark:text-Bright-Turquoise">
+                <span className=" font-medium  ">Bill to</span>
+                <strong className="capitalize dark:text-white text-dark text-[15px]">
+                  {invoice.clientName}
                 </strong>
+                <p className=" font-medium ] ">
+                  {invoice.clientAddress[0]?.street} <br />{" "}
+                  {invoice.clientAddress[0]?.city} <br />
+                  {invoice.clientAddress[0]?.postCode} <br />{" "}
+                  {invoice.clientAddress[0]?.country}
+                </p>
               </div>
-            </div>
-
-            <div className="grid gap-2 text-[13px] text-Subtle-Turquoise dark:text-Bright-Turquoise">
-              <span className=" font-medium  ">Bill to</span>
-              <strong className="capitalize dark:text-white text-dark text-[15px]">
-                {invoice.clientName}
-              </strong>
-              <p className=" font-medium ] ">
-                {invoice.clientAddress[0]?.street} <br />{" "}
-                {invoice.clientAddress[0]?.city} <br />
-                {invoice.clientAddress[0]?.postCode} <br />{" "}
-                {invoice.clientAddress[0]?.country}
-              </p>
             </div>
 
             <div className="grid gap-2">
@@ -177,8 +179,8 @@ export const ViewInvoice = () => {
             </div>
           </div>
 
-          <div className="p-8 dark:bg-Dusty-Aqua rounded-lg mt-11">
-            <table className="w-full">
+          <div className="p-8 dark:bg-Dusty-Aqua rounded-lg mt-11 text-[15px]">
+            <table className="w-full sm:hidden">
               <tr className="dark:text-Bright-Turquoise text-Subtle-Turquoise">
                 <th>item Name</th>
                 <th>QTY.</th>
@@ -198,9 +200,24 @@ export const ViewInvoice = () => {
                 </tr>
               ))}
             </table>
+
+            <div className="hidden sm:block">
+              {invoice.item.map((item) => (
+                <div key={item.id} className=" text-dark dark:text-white">
+                  <div className="grid gap-y-2">
+                    <b className="text-dark dark:text-white">{item.itemName}</b>
+                    <span className="text-Soft-Teal">
+                      {item.quantity} x {formatPrice(item.price)}
+                    </span>
+                  </div>
+
+                  <b className="text-white">{formatPrice(item.total)}</b>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="bg-Dusty-Aqua w-full h-20 px-8 flex justify-between items-center text-white text-[13px] rounded-b-md dark:bg-dark ">
-            <span>Amount Due</span>
+          <div className="bg-Dusty-Aqua w-full h-20 px-8 flex justify-between items-center text-white text-[13px] rounded-b-md dark:bg-dark sm:px-4 ">
+            <span className="text-[13px]">Amount Due</span>
             <strong className="text-2xl ">{formatPrice(invoice.total)}</strong>
           </div>
         </div>

@@ -30,9 +30,9 @@ export const DeleteModal = ({ id, setDeleteModal }: DeleteModalProp) => {
     <>
       <div
         onClick={() => setDeleteModal(false)}
-        className="fixed inset-0 w-full h-full bg-dark/15"
+        className="fixed inset-0 w-full h-full bg-dark/15 z-40 sm:bg-dark/75"
       ></div>
-      <div className="w-[480px] absolute top-[20%] left-1/2 -translate-x-1/2 translate-y-1/2  rounded-lg p-12 z-20 bg-white dark:bg-dark">
+      <div className="w-[480px] absolute top-[20%] left-1/2 -translate-x-1/2 translate-y-1/2  rounded-lg p-12 z-50 bg-white dark:bg-dark sm:w-[90%]">
         <h1 className="text-xl font-bold -tracking-tighter mb-3 text-dark dark:text-white">
           Confirm Deletion
         </h1>
@@ -52,7 +52,7 @@ export const DeleteModal = ({ id, setDeleteModal }: DeleteModalProp) => {
           <Button
             onClick={onDelete}
             variant={"destructive"}
-            className="text-base pt-3 rounded-3xl h-12 w-[89px] font-bold "
+            className="text-base pt-3 rounded-3xl h-12 w-[89px] font-bold  text-white "
           >
             Delete
           </Button>

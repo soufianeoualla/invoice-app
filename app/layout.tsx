@@ -21,13 +21,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <ThemeContext>
+       
           <NotificationProvider>
             <AddEditModalProvider>
               <TriggerProvider>{children}</TriggerProvider>
             </AddEditModalProvider>
           </NotificationProvider>
-        </ThemeContext>
+       
       </body>
     </html>
   );
