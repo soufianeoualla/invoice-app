@@ -4,6 +4,7 @@ import Link from "next/link";
 import logo from "@/public/logo.svg";
 import { auth } from "@/auth";
 import { logOut } from "@/actions/logOut";
+import { IoLogOutOutline } from "react-icons/io5";
 
 export const Header = async () => {
   const session = await auth();
@@ -21,7 +22,6 @@ export const Header = async () => {
           className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]"
         />
       </div>
-      
 
       {!session && (
         <div className="flex items-center sm:gap-4">
@@ -42,17 +42,12 @@ export const Header = async () => {
       )}
 
       {session && (
-        <div>
-          <Button
-            className="text-primary border-primary hover:bg-primary hover:text-white "
-            asChild
-            size={"lg"}
-            variant={"default"}
-            onClick={logOut}
-          >
+        <form action={logOut}>
+          <Button type="submit" className=" flex gap-x-2 items-center">
             Log Out
+            <IoLogOutOutline className="w-5 h-5" />
           </Button>
-        </div>
+        </form>
       )}
     </header>
   );

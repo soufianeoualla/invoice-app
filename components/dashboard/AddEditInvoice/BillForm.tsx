@@ -122,8 +122,8 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
           items,
           invoice.id
         ).then((data) => {
-          setError(data.error);
-          setSuccess(data.success);
+          setError(data?.error);
+          setSuccess(data?.success);
         });
       } else {
         addInvoice(
