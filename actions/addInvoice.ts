@@ -44,6 +44,7 @@ export const addInvoice = async (
   const status = "pending";
   const InvoiceId = uuid().substring(0, 5);
 
+
   try {
     await db.invoice.create({
       data: {

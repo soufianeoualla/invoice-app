@@ -108,37 +108,43 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
     });
     setItemError(errors ? errors : undefined);
   };
-  const onSave = (values: z.infer<typeof BillFormSchema>) => {
-    validateItems();
+  const onSave =  (values: z.infer<typeof BillFormSchema>) => {
+     validateItems();
     if (itemError?.itemName || itemError?.price || itemError?.quantity) return;
+
     startTransition(() => {
-      edit
-        ? editInvoice(
-            values,
-            total,
-            date as Date,
-            paymentDue as string,
-            items,
-            invoice.id
-          ).then((data) => {
-            setError(data.error);
-            setSuccess(data.success);
-          })
-        : addInvoice(
-            values,
-            total,
-            date as Date,
-            paymentDue as string,
-            items
-          ).then((data) => {
-            setError(data.error);
-            setSuccess(data.success);
-          });
+      if (edit) {
+        editInvoice(
+          values,
+          total,
+          date as Date,
+          paymentDue as string,
+          items,
+          invoice.id
+        ).then((data) => {
+          setError(data.error);
+          setSuccess(data.success);
+        });
+      } else {
+        addInvoice(
+          values,
+          total,
+          date as Date,
+          paymentDue as string,
+          items
+        ).then((data) => {
+          setError(data?.error);
+          setSuccess(data?.success);
+        });
+      }
       triggerToggle();
       notificationToggle();
       toggle();
     });
+
+   
   };
+
   const onSaveDraft = () => {
     const values = form.getValues();
     startTransition(() => {
@@ -342,7 +348,9 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
                   onClick={toggle}
                   disabled={isPending}
                   className={` pt-2.5 h-12  hover:bg-transparent  text-sm rounded-3xl font-bold  ${
-                    edit ? "dark:bg-Dusty-Aqua/80 text-Soft-Teal dark:hover:text-white":"dark:bg-light text-light-purple hover:text-dark"
+                    edit
+                      ? "dark:bg-Dusty-Aqua/80 text-Soft-Teal dark:hover:text-white"
+                      : "dark:bg-light text-light-purple hover:text-dark"
                   }`}
                 >
                   Discard
