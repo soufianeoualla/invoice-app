@@ -4,8 +4,8 @@ import Image from "next/image";
 import hero_image from "@/components/assets/hero-section.svg";
 export const HeroSection = () => {
   return (
-    <div className="flex h-[70vh]   items-center   max-w-screen-xl mx-auto justify-around">
-      <div className="space-y-4 w-[25%]">
+    <div className="flex h-[70vh]   items-center   max-w-screen-xl mx-auto justify-around md:p-8  md:gap-10 sm:flex-col-reverse sm:justify-center">
+      <div className="space-y-4 w-[25%] sm:w-full">
         <h1 className="text-4xl font-bold capitalize text-dark ">
           Say Goodbye to invoice Stress
         </h1>
@@ -29,7 +29,7 @@ export const HeroSection = () => {
         </div>
       </div>
 
-      <Image width={600} src={hero_image} alt="Payment" />
+      <Image width={600} src={hero_image} alt="Payment" className="md:w-[500px] sm:w-full"/>
     </div>
   );
 };

@@ -13,7 +13,7 @@ export const Summary = ({ invoice }: Invoice) => {
     paymentDueDate.getDate() + parseInt(invoice.paymentDue)
   );
   return (
-    <div className="my-6 bg-white rounded-lg p-12 dark:bg-Slate-Teal ">
+    <div className="my-6 bg-white rounded-lg p-12 dark:bg-Slate-Teal sm:mb-10 ">
       <div className="flex items-center justify-between sm:flex-col sm:gap-y-8 sm:justify-start sm:items-start">
         <div className="grid gap-y-2">
           <strong className="text-dark uppercase dark:text-white text-[15px]">
@@ -24,7 +24,7 @@ export const Summary = ({ invoice }: Invoice) => {
             {invoice?.description}
           </span>
         </div>
-        <div className="text-Subtle-Turquoise text-[13px] font-medium text-right dark:text-Bright-Turquoise">
+        <div className="text-Subtle-Turquoise text-[13px] font-medium text-right dark:text-Bright-Turquoise sm:text-left">
           <div>
             {invoice?.senderAddress[0]?.street} <br />
             {invoice?.senderAddress[0]?.city} <br />
@@ -104,7 +104,7 @@ export const Summary = ({ invoice }: Invoice) => {
 
         <div className="hidden sm:block">
           {invoice.item.map((item) => (
-            <div key={item.id} className=" text-dark dark:text-white">
+            <div key={item.id} className=" text-dark dark:text-white flex items-center justify-between">
               <div className="grid gap-y-2">
                 <b className="text-dark dark:text-white">{item.itemName}</b>
                 <span className="text-Soft-Teal">

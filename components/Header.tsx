@@ -21,13 +21,7 @@ export const Header = async () => {
           className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]"
         />
       </div>
-      <nav>
-        <ul className="flex items-center gap-x-8 text-dark font-semibold ">
-          <li className="hover:text-primary cursor-pointer">Features</li>
-          <li className="hover:text-primary cursor-pointer">Pricing</li>
-          <li className="hover:text-primary cursor-pointer">Contact</li>
-        </ul>
-      </nav>
+      
 
       {!session && (
         <div className="flex items-center sm:gap-4">

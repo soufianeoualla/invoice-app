@@ -347,13 +347,13 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
                 >
                   Discard
                 </Button>
-                <div className="space-x-2">
+                <div className=" ml-2 space-x-2 flex items-center">
                   {!edit && (
                     <Button
                       onClick={onSaveDraft}
                       type="button"
                       disabled={isPending}
-                      className="bg-Dusty-Aqua text-Soft-Teal h-12 pt-2.5 w-[133px] font-bold text-[15px] rounded-3xl hover:bg-dark dark:bg-Dusty-Aqua/80"
+                      className="bg-Dusty-Aqua text-Soft-Teal h-12 pt-2.5 w-[133px] sm:w[20%] font-bold text-[15px] rounded-3xl hover:bg-dark dark:bg-Dusty-Aqua/80"
                     >
                       Save as Draft
                     </Button>
@@ -361,7 +361,7 @@ export const BillForm = ({ edit, invoice }: EditProp) => {
                   <Button
                     type="submit"
                     disabled={isPending}
-                    className="font-bold text-[15px]  h-12 pt-2.5 w-[133px] rounded-3xl"
+                    className="font-bold text-[15px]  h-12 pt-2.5 w-[133px] sm:w[20%] rounded-3xl"
                   >
                     Save & Send
                   </Button>
