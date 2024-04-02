@@ -5,8 +5,7 @@ import moon from "@/components/assets/icon-moon.svg";
 import sun from "@/components/assets/icon-sun.svg";
 import Link from "next/link";
 import { FaUserLarge } from "react-icons/fa6";
-import { useEffect, useState } from "react";
-import { getSession, signOut } from "next-auth/react";
+import {  signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 import { Button } from "./ui/button";
 import { IoMdLogOut } from "react-icons/io";
@@ -22,17 +21,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 export const Sidebar = () => {
-  const [image, setimage] = useState<string | null | undefined>();
   const { setTheme, theme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
-  useEffect(() => {
-    const getImage = async () => {
-      const session = await getSession();
-      const image = session?.user?.image;
-      setimage(image);
-    };
-    getImage();
-  }, []);
+  
 
   return (
     <div className=" bg-DustyAqua h-screen bg-Dusty-Aqua rounded-r-2xl flex flex-col justify-between z-30 md:h-20 md:flex-row md:rounded-none ">
@@ -71,15 +62,7 @@ export const Sidebar = () => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost">
-                {image ? (
-                  <Image
-                    src={image}
-                    alt="user avatar"
-                    className="rounded-full w-10 h-10 "
-                  />
-                ) : (
                   <FaUserLarge className="text-white text-xl" />
-                )}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-white dark:bg-dark border-none">
